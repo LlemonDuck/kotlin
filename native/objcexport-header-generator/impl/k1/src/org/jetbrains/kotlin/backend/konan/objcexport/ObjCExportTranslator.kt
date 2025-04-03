@@ -15,6 +15,7 @@ import org.jetbrains.kotlin.builtins.*
 import org.jetbrains.kotlin.descriptors.*
 import org.jetbrains.kotlin.descriptors.annotations.AnnotationDescriptor
 import org.jetbrains.kotlin.descriptors.annotations.Annotations
+import org.jetbrains.kotlin.descriptors.impl.FunctionDescriptorImpl
 import org.jetbrains.kotlin.ir.objcinterop.*
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.resolve.constants.ArrayValue
@@ -260,11 +261,15 @@ class ObjCExportTranslatorImpl(
             // TODO: consider adding exception-throwing impls for these.
             when (descriptor.kind) {
                 ClassKind.OBJECT -> {
+                    val selector = namer.getObjectInstanceSelector(descriptor)
                     add {
                         ObjCMethod(
                             null, false, ObjCInstanceType,
-                            listOf(namer.getObjectInstanceSelector(descriptor)), emptyList(),
-                            listOf(swiftNameAttribute("init()"))
+                            listOf(selector), emptyList(),
+                            listOfNotNull(
+                                swiftNameAttribute("init()"),
+                                if (namer.needsExplicitMethodFamily(selector)) "objc_method_family(none)" else null
+                            )
                         )
                     }
                     add {
@@ -287,6 +292,19 @@ class ObjCExportTranslatorImpl(
                                 entryName, it, type, listOf("class", "readonly"),
                                 declarationAttributes = listOf(swiftNameAttribute(swiftName))
                             )
+                        }
+                        if (namer.needsExplicitMethodFamily(entryName)) {
+                            add {
+                                ObjCMethod(
+                                    null,
+                                    null,
+                                    false,
+                                    type,
+                                    listOf(entryName),
+                                    emptyList<ObjCParameter>(),
+                                    listOf("objc_method_family(none)")
+                                )
+                            }
                         }
                     }
 
@@ -442,7 +460,16 @@ class ObjCExportTranslatorImpl(
                 .makeMethodsOrderStable()
                 .asSequence()
                 .distinctBy { namer.getSelector(it) }
-                .forEach { base -> add { buildMethod(method, base, objCExportScope) } }
+                .forEach { base ->
+                    add {
+                        buildMethod(
+                            method,
+                            base,
+                            objCExportScope,
+                            methodFamilyNone = namer.needsExplicitMethodFamily(namer.getSelector(base))
+                        )
+                    }
+                }
         }
 
         properties.makePropertiesOrderStable().forEach { property ->
@@ -450,7 +477,14 @@ class ObjCExportTranslatorImpl(
                 .makePropertiesOrderStable()
                 .asSequence()
                 .distinctBy { namer.getPropertyName(it) }
-                .forEach { base -> add { buildProperty(property, base, objCExportScope) } }
+                .forEach { base ->
+                    add { buildProperty(property, base, objCExportScope) }
+                    if (namer.needsExplicitMethodFamily(getSelector(base.getter!!))) {
+                        add {
+                            buildMethod(property.getter!!, base.getter!!, objCExportScope, methodFamilyNone = true)
+                        }
+                    }
+                }
         }
     }
 
@@ -497,8 +531,20 @@ class ObjCExportTranslatorImpl(
         properties: List<PropertyDescriptor>,
         objCExportScope: ObjCExportScope,
     ) {
-        methods.makeMethodsOrderStable().forEach { add { buildMethod(it, it, objCExportScope) } }
-        properties.makePropertiesOrderStable().forEach { add { buildProperty(it, it, objCExportScope) } }
+        methods.makeMethodsOrderStable().forEach {
+            add {
+                buildMethod(it, it, objCExportScope, methodFamilyNone = namer.needsExplicitMethodFamily(getSelector(it)))
+            }
+        }
+        properties.makePropertiesOrderStable().forEach {
+            add { buildProperty(it, it, objCExportScope) }
+            if (namer.needsExplicitMethodFamily(getSelector(it.getter!!))) {
+                add {
+                    buildMethod(it.getter!!, it.getter!!, objCExportScope, methodFamilyNone = true)
+                }
+            }
+
+        }
     }
     // TODO: consider checking that signatures for bases with same selector/name are equal.
 
@@ -553,6 +599,7 @@ class ObjCExportTranslatorImpl(
         baseMethod: FunctionDescriptor,
         objCExportScope: ObjCExportScope,
         unavailable: Boolean = false,
+        methodFamilyNone: Boolean = false,
     ): ObjCMethod {
         fun collectParameters(baseMethodBridge: MethodBridge, method: FunctionDescriptor): List<ObjCParameter> {
             fun unifyName(initialName: String, usedNames: Set<String>): String {
@@ -645,6 +692,10 @@ class ObjCExportTranslatorImpl(
             attributes += "unavailable"
         } else {
             attributes.addIfNotNull(getDeprecationAttribute(method))
+        }
+
+        if (methodFamilyNone) {
+            attributes += "objc_method_family(none)"
         }
 
         val comment = buildComment(method, baseMethodBridge, parameters)
