@@ -10,9 +10,13 @@ package org.jetbrains.kotlin.gradle.plugin.mpp
 
 import org.gradle.api.Project
 import org.jetbrains.kotlin.gradle.internal.properties.nativeProperties
-import org.jetbrains.kotlin.gradle.plugin.*
+import org.jetbrains.kotlin.gradle.plugin.AbstractKotlinTargetConfigurator
+import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
+import org.jetbrains.kotlin.gradle.plugin.KotlinNativeTargetConfigurator
+import org.jetbrains.kotlin.gradle.plugin.PropertiesProvider
 import org.jetbrains.kotlin.gradle.targets.android.internal.InternalKotlinTargetPreset
-import org.jetbrains.kotlin.gradle.targets.native.internal.*
+import org.jetbrains.kotlin.gradle.targets.native.internal.setupCInteropCommonizerDependencies
+import org.jetbrains.kotlin.gradle.targets.native.internal.setupCInteropPropagatedDependencies
 import org.jetbrains.kotlin.gradle.utils.SingleActionPerProject
 import org.jetbrains.kotlin.gradle.utils.setupNativeCompiler
 import org.jetbrains.kotlin.konan.target.HostManager
@@ -116,7 +120,28 @@ internal val KonanTarget.isCurrentHost: Boolean
  *
  * Ideally, these APIs should be in [HostManager] instead of KGP-side wrappers. Refer to KT-64512 for that
  */
-internal fun KonanTarget.enabledOnCurrentHostForKlibCompilation(provider: PropertiesProvider) =
-    HostManager().isEnabled(this) || provider.enableKlibsCrossCompilation
+internal fun KonanTarget.enabledOnCurrentHostForKlibCompilation(
+    provider: PropertiesProvider,
+    hasCInterops: Boolean = false
+): Boolean {
+    // If cross-compilation is disabled or target has cinterops,
+    // use standard HostManager enablement check
+    if (provider.disableKlibsCrossCompilation || hasCInterops) {
+        return HostManager().isEnabled(this)
+    }
+
+    // Otherwise, allow compilation for all targets
+    return true
+}
+
+// Extension version for KotlinNativeTarget
+internal fun KotlinNativeTarget.enabledOnCurrentHostForKlibCompilation(provider: PropertiesProvider): Boolean {
+    val hasCInterops = compilations
+        .getByName(KotlinCompilation.MAIN_COMPILATION_NAME)
+        .cinterops
+        .isNotEmpty()
+
+    return konanTarget.enabledOnCurrentHostForKlibCompilation(provider, hasCInterops)
+}
 
 internal fun KonanTarget.enabledOnCurrentHostForBinariesCompilation() = HostManager().isEnabled(this)

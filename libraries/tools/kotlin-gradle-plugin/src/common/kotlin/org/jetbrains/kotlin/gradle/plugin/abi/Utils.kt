@@ -47,7 +47,7 @@ internal fun KotlinTarget.toKlibTarget(): KlibTarget {
  */
 internal fun targetIsSupported(target: KotlinTarget, propertiesProvider: PropertiesProvider): Boolean {
     return when (target) {
-        is KotlinNativeTarget -> target.konanTarget.enabledOnCurrentHostForKlibCompilation(propertiesProvider)
+        is KotlinNativeTarget -> target.enabledOnCurrentHostForKlibCompilation(propertiesProvider)
         else -> true
     }
 }
