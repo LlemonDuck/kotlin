@@ -29,9 +29,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (KotlinNothing * _Nullable)nullMethod __attribute__((swift_name("nullMethod()")));
 - (void)nullParamNothing:(KotlinNothing * _Nullable)nothing __attribute__((swift_name("nullParam(nothing:)")));
 @property (readonly) KotlinNothing *nonNullVal __attribute__((swift_name("nonNullVal")));
-@property KotlinNothing *nonNullVar __attribute__((swift_name("nonNullVar")));
+@property (strong) KotlinNothing *nonNullVar __attribute__((swift_name("nonNullVar")));
 @property (readonly) KotlinNothing * _Nullable nullVal __attribute__((swift_name("nullVal")));
-@property KotlinNothing * _Nullable nullVar __attribute__((swift_name("nullVar")));
+@property (strong) KotlinNothing * _Nullable nullVar __attribute__((swift_name("nullVar")));
 @end
 
 __attribute__((objc_subclassing_restricted))

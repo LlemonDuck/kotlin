@@ -102,18 +102,18 @@ __attribute__((objc_subclassing_restricted))
 @property BOOL allowSpecialFloatingPointValues __attribute__((swift_name("allowSpecialFloatingPointValues")));
 @property BOOL allowStructuredMapKeys __attribute__((swift_name("allowStructuredMapKeys")));
 @property BOOL allowTrailingComma __attribute__((swift_name("allowTrailingComma")));
-@property NSString *classDiscriminator __attribute__((swift_name("classDiscriminator")));
-@property ClassDiscriminatorMode *classDiscriminatorMode __attribute__((swift_name("classDiscriminatorMode")));
+@property (strong) NSString *classDiscriminator __attribute__((swift_name("classDiscriminator")));
+@property (strong) ClassDiscriminatorMode *classDiscriminatorMode __attribute__((swift_name("classDiscriminatorMode")));
 @property BOOL coerceInputValues __attribute__((swift_name("coerceInputValues")));
 @property BOOL decodeEnumsCaseInsensitive __attribute__((swift_name("decodeEnumsCaseInsensitive")));
 @property BOOL encodeDefaults __attribute__((swift_name("encodeDefaults")));
 @property BOOL explicitNulls __attribute__((swift_name("explicitNulls")));
 @property BOOL ignoreUnknownKeys __attribute__((swift_name("ignoreUnknownKeys")));
 @property BOOL isLenient __attribute__((swift_name("isLenient")));
-@property id<JsonNamingStrategy> _Nullable namingStrategy __attribute__((swift_name("namingStrategy")));
+@property (strong) id<JsonNamingStrategy> _Nullable namingStrategy __attribute__((swift_name("namingStrategy")));
 @property BOOL prettyPrint __attribute__((swift_name("prettyPrint")));
-@property NSString *prettyPrintIndent __attribute__((swift_name("prettyPrintIndent")));
-@property SerializersModule *serializersModule __attribute__((swift_name("serializersModule")));
+@property (strong) NSString *prettyPrintIndent __attribute__((swift_name("prettyPrintIndent")));
+@property (strong) SerializersModule *serializersModule __attribute__((swift_name("serializersModule")));
 @property BOOL useAlternativeNames __attribute__((swift_name("useAlternativeNames")));
 @property BOOL useArrayPolymorphism __attribute__((swift_name("useArrayPolymorphism")));
 @end
@@ -125,7 +125,7 @@ __attribute__((objc_subclassing_restricted))
 @property (readonly) BOOL allowStructuredMapKeys __attribute__((swift_name("allowStructuredMapKeys")));
 @property (readonly) BOOL allowTrailingComma __attribute__((swift_name("allowTrailingComma")));
 @property (readonly) NSString *classDiscriminator __attribute__((swift_name("classDiscriminator")));
-@property ClassDiscriminatorMode *classDiscriminatorMode __attribute__((swift_name("classDiscriminatorMode")));
+@property (strong) ClassDiscriminatorMode *classDiscriminatorMode __attribute__((swift_name("classDiscriminatorMode")));
 @property (readonly) BOOL coerceInputValues __attribute__((swift_name("coerceInputValues")));
 @property (readonly) BOOL decodeEnumsCaseInsensitive __attribute__((swift_name("decodeEnumsCaseInsensitive")));
 @property (readonly) BOOL encodeDefaults __attribute__((swift_name("encodeDefaults")));

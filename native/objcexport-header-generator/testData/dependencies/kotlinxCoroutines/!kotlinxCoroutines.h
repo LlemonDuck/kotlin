@@ -1044,7 +1044,7 @@ __attribute__((objc_subclassing_restricted))
 
 @protocol ThreadSafeHeapNode
 @required
-@property ThreadSafeHeap<id> * _Nullable heap __attribute__((swift_name("heap")));
+@property (strong) ThreadSafeHeap<id> * _Nullable heap __attribute__((swift_name("heap")));
 @property int32_t index __attribute__((swift_name("index")));
 @end
 
@@ -2137,7 +2137,7 @@ __attribute__((objc_subclassing_restricted))
 - (BOOL)compareAndSetExpected:(T _Nullable)expected newValue:(T _Nullable)newValue __attribute__((swift_name("compareAndSet(expected:newValue:)")));
 - (T _Nullable)getAndSetNewValue:(T _Nullable)newValue __attribute__((swift_name("getAndSet(newValue:)")));
 - (NSString *)description __attribute__((swift_name("description()")));
-@property T _Nullable value __attribute__((swift_name("value")));
+@property (strong) T _Nullable value __attribute__((swift_name("value")));
 @end
 
 @protocol KotlinSuspendFunction0 <KotlinFunction>

@@ -7,6 +7,7 @@ package org.jetbrains.kotlin.objcexport
 
 import org.jetbrains.kotlin.analysis.api.symbols.KaPropertySymbol
 import org.jetbrains.kotlin.backend.konan.objcexport.ObjCProperty
+import org.jetbrains.kotlin.backend.konan.objcexport.ObjCReferenceType
 import org.jetbrains.kotlin.backend.konan.objcexport.isInstance
 import org.jetbrains.kotlin.backend.konan.objcexport.swiftNameAttribute
 import org.jetbrains.kotlin.objcexport.analysisApiUtils.getBridgeReceiverType
@@ -35,6 +36,8 @@ fun ObjCExportContext.buildProperty(symbol: KaPropertySymbol): ObjCProperty {
 
     if (symbol.setter == null || !analysisSession.isVisibleInObjC(symbol.setter)) {
         attributes += "readonly"
+    } else if (type is ObjCReferenceType) {
+        attributes += "strong"
     }
 
     declarationAttributes.addIfNotNull(analysisSession.getObjCDeprecationStatus(symbol))

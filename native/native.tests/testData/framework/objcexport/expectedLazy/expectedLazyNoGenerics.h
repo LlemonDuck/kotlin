@@ -156,8 +156,8 @@ __attribute__((swift_name("ResultHolder")))
 - (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer));
 + (instancetype)new __attribute__((availability(swift, unavailable, message="use object initializers instead")));
 @property int32_t completed __attribute__((swift_name("completed")));
-@property KtKotlinThrowable * _Nullable exception __attribute__((swift_name("exception")));
-@property id _Nullable result __attribute__((swift_name("result")));
+@property (strong) KtKotlinThrowable * _Nullable exception __attribute__((swift_name("exception")));
+@property (strong) id _Nullable result __attribute__((swift_name("result")));
 @end
 
 __attribute__((swift_name("SuspendBridge")))
@@ -985,7 +985,7 @@ __attribute__((swift_name("KT38641.Var")))
 @interface KtKT38641Var : KtBase
 - (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer));
 + (instancetype)new __attribute__((availability(swift, unavailable, message="use object initializers instead")));
-@property (getter=description, setter=setDescription:) NSString *description_ __attribute__((swift_name("description_")));
+@property (strong, getter=description, setter=setDescription:) NSString *description_ __attribute__((swift_name("description_")));
 @end
 
 __attribute__((objc_subclassing_restricted))
@@ -1007,7 +1007,7 @@ __attribute__((swift_name("KT38641.OverrideVal")))
 __attribute__((swift_name("KT38641OverrideVar")))
 @protocol KtKT38641OverrideVar
 @required
-@property (getter=description, setter=setDescription:) NSString *description_ __attribute__((swift_name("description_")));
+@property (strong, getter=description, setter=setDescription:) NSString *description_ __attribute__((swift_name("description_")));
 @end
 
 __attribute__((objc_subclassing_restricted))
@@ -1476,7 +1476,7 @@ __attribute__((swift_name("NoAutoreleaseKotlinReceiveHelper")))
 - (NSString *)receiveString __attribute__((swift_name("receiveString()")));
 - (id)receiveSwiftObject __attribute__((swift_name("receiveSwiftObject()")));
 @property (readonly) KtKotlinLivenessTracker *kotlinLivenessTracker __attribute__((swift_name("kotlinLivenessTracker")));
-@property id swiftObject __attribute__((swift_name("swiftObject")));
+@property (strong) id swiftObject __attribute__((swift_name("swiftObject")));
 @end
 
 __attribute__((objc_subclassing_restricted))
@@ -2024,9 +2024,9 @@ __attribute__((swift_name("TripleVars")))
 - (BOOL)isEqual:(id _Nullable)other __attribute__((swift_name("isEqual(_:)")));
 - (NSUInteger)hash __attribute__((swift_name("hash()")));
 - (NSString *)description __attribute__((swift_name("description()")));
-@property id _Nullable first __attribute__((swift_name("first")));
-@property id _Nullable second __attribute__((swift_name("second")));
-@property id _Nullable third __attribute__((swift_name("third")));
+@property (strong) id _Nullable first __attribute__((swift_name("first")));
+@property (strong) id _Nullable second __attribute__((swift_name("second")));
+@property (strong) id _Nullable third __attribute__((swift_name("third")));
 @end
 
 __attribute__((swift_name("WithCompanionAndObject")))
@@ -2043,7 +2043,7 @@ __attribute__((swift_name("WithCompanionAndObject.Companion")))
 + (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
 + (instancetype)companion __attribute__((swift_name("init()")));
 @property (class, readonly, getter=shared) KtWithCompanionAndObjectCompanion *shared __attribute__((swift_name("shared")));
-@property id<KtI> _Nullable named __attribute__((swift_name("named")));
+@property (strong) id<KtI> _Nullable named __attribute__((swift_name("named")));
 @property (readonly) NSString *str __attribute__((swift_name("str")));
 @end
 
@@ -2739,17 +2739,17 @@ __attribute__((swift_name("TestDeprecation")))
 - (void)testTopLevelHiddenNestedNested:(id)topLevelHiddenNestedNested __attribute__((swift_name("test(topLevelHiddenNestedNested:)")));
 - (void)warning __attribute__((swift_name("warning()"))) __attribute__((deprecated("warning")));
 @property (readonly) id _Nullable errorVal __attribute__((swift_name("errorVal"))) __attribute__((unavailable("error")));
-@property id _Nullable errorVar __attribute__((swift_name("errorVar"))) __attribute__((unavailable("error")));
+@property (strong) id _Nullable errorVar __attribute__((swift_name("errorVar"))) __attribute__((unavailable("error")));
 @property (readonly) id _Nullable normalVal __attribute__((swift_name("normalVal")));
-@property id _Nullable normalVar __attribute__((swift_name("normalVar")));
+@property (strong) id _Nullable normalVar __attribute__((swift_name("normalVar")));
 @property (readonly) id _Nullable openErrorVal __attribute__((swift_name("openErrorVal"))) __attribute__((unavailable("error")));
-@property id _Nullable openErrorVar __attribute__((swift_name("openErrorVar"))) __attribute__((unavailable("error")));
+@property (strong) id _Nullable openErrorVar __attribute__((swift_name("openErrorVar"))) __attribute__((unavailable("error")));
 @property (readonly) id _Nullable openNormalVal __attribute__((swift_name("openNormalVal")));
-@property id _Nullable openNormalVar __attribute__((swift_name("openNormalVar")));
+@property (strong) id _Nullable openNormalVar __attribute__((swift_name("openNormalVar")));
 @property (readonly) id _Nullable openWarningVal __attribute__((swift_name("openWarningVal"))) __attribute__((deprecated("warning")));
-@property id _Nullable openWarningVar __attribute__((swift_name("openWarningVar"))) __attribute__((deprecated("warning")));
+@property (strong) id _Nullable openWarningVar __attribute__((swift_name("openWarningVar"))) __attribute__((deprecated("warning")));
 @property (readonly) id _Nullable warningVal __attribute__((swift_name("warningVal"))) __attribute__((deprecated("warning")));
-@property id _Nullable warningVar __attribute__((swift_name("warningVar"))) __attribute__((deprecated("warning")));
+@property (strong) id _Nullable warningVar __attribute__((swift_name("warningVar"))) __attribute__((deprecated("warning")));
 @end
 
 __attribute__((swift_name("TestDeprecation.OpenHidden")))
@@ -2900,11 +2900,11 @@ __attribute__((swift_name("TestDeprecation.HiddenOverride")))
 - (int32_t)openNormal __attribute__((swift_name("openNormal()"))) __attribute__((unavailable("hidden")));
 - (void)openWarning __attribute__((swift_name("openWarning()"))) __attribute__((unavailable("hidden")));
 @property (readonly) id _Nullable openErrorVal __attribute__((swift_name("openErrorVal"))) __attribute__((unavailable("hidden")));
-@property id _Nullable openErrorVar __attribute__((swift_name("openErrorVar"))) __attribute__((unavailable("hidden")));
+@property (strong) id _Nullable openErrorVar __attribute__((swift_name("openErrorVar"))) __attribute__((unavailable("hidden")));
 @property (readonly) id _Nullable openNormalVal __attribute__((swift_name("openNormalVal"))) __attribute__((unavailable("hidden")));
-@property id _Nullable openNormalVar __attribute__((swift_name("openNormalVar"))) __attribute__((unavailable("hidden")));
+@property (strong) id _Nullable openNormalVar __attribute__((swift_name("openNormalVar"))) __attribute__((unavailable("hidden")));
 @property (readonly) id _Nullable openWarningVal __attribute__((swift_name("openWarningVal"))) __attribute__((unavailable("hidden")));
-@property id _Nullable openWarningVar __attribute__((swift_name("openWarningVar"))) __attribute__((unavailable("hidden")));
+@property (strong) id _Nullable openWarningVar __attribute__((swift_name("openWarningVar"))) __attribute__((unavailable("hidden")));
 @end
 
 __attribute__((objc_subclassing_restricted))
@@ -2921,13 +2921,13 @@ __attribute__((swift_name("TestDeprecation.ErrorOverride")))
 - (int32_t)openNormal __attribute__((swift_name("openNormal()"))) __attribute__((unavailable("error")));
 - (void)openWarning __attribute__((swift_name("openWarning()"))) __attribute__((unavailable("error")));
 @property (readonly) id _Nullable openErrorVal __attribute__((swift_name("openErrorVal"))) __attribute__((unavailable("error")));
-@property id _Nullable openErrorVar __attribute__((swift_name("openErrorVar"))) __attribute__((unavailable("error")));
+@property (strong) id _Nullable openErrorVar __attribute__((swift_name("openErrorVar"))) __attribute__((unavailable("error")));
 @property (readonly) id _Nullable openHiddenVal __attribute__((swift_name("openHiddenVal"))) __attribute__((unavailable("error")));
-@property id _Nullable openHiddenVar __attribute__((swift_name("openHiddenVar"))) __attribute__((unavailable("error")));
+@property (strong) id _Nullable openHiddenVar __attribute__((swift_name("openHiddenVar"))) __attribute__((unavailable("error")));
 @property (readonly) id _Nullable openNormalVal __attribute__((swift_name("openNormalVal"))) __attribute__((unavailable("error")));
-@property id _Nullable openNormalVar __attribute__((swift_name("openNormalVar"))) __attribute__((unavailable("error")));
+@property (strong) id _Nullable openNormalVar __attribute__((swift_name("openNormalVar"))) __attribute__((unavailable("error")));
 @property (readonly) id _Nullable openWarningVal __attribute__((swift_name("openWarningVal"))) __attribute__((unavailable("error")));
-@property id _Nullable openWarningVar __attribute__((swift_name("openWarningVar"))) __attribute__((unavailable("error")));
+@property (strong) id _Nullable openWarningVar __attribute__((swift_name("openWarningVar"))) __attribute__((unavailable("error")));
 @end
 
 __attribute__((objc_subclassing_restricted))
@@ -2944,13 +2944,13 @@ __attribute__((swift_name("TestDeprecation.WarningOverride")))
 - (int32_t)openNormal __attribute__((swift_name("openNormal()"))) __attribute__((deprecated("warning")));
 - (void)openWarning __attribute__((swift_name("openWarning()"))) __attribute__((deprecated("warning")));
 @property (readonly) id _Nullable openErrorVal __attribute__((swift_name("openErrorVal"))) __attribute__((deprecated("warning")));
-@property id _Nullable openErrorVar __attribute__((swift_name("openErrorVar"))) __attribute__((deprecated("warning")));
+@property (strong) id _Nullable openErrorVar __attribute__((swift_name("openErrorVar"))) __attribute__((deprecated("warning")));
 @property (readonly) id _Nullable openHiddenVal __attribute__((swift_name("openHiddenVal"))) __attribute__((deprecated("warning")));
-@property id _Nullable openHiddenVar __attribute__((swift_name("openHiddenVar"))) __attribute__((deprecated("warning")));
+@property (strong) id _Nullable openHiddenVar __attribute__((swift_name("openHiddenVar"))) __attribute__((deprecated("warning")));
 @property (readonly) id _Nullable openNormalVal __attribute__((swift_name("openNormalVal"))) __attribute__((deprecated("warning")));
-@property id _Nullable openNormalVar __attribute__((swift_name("openNormalVar"))) __attribute__((deprecated("warning")));
+@property (strong) id _Nullable openNormalVar __attribute__((swift_name("openNormalVar"))) __attribute__((deprecated("warning")));
 @property (readonly) id _Nullable openWarningVal __attribute__((swift_name("openWarningVal"))) __attribute__((deprecated("warning")));
-@property id _Nullable openWarningVar __attribute__((swift_name("openWarningVar"))) __attribute__((deprecated("warning")));
+@property (strong) id _Nullable openWarningVar __attribute__((swift_name("openWarningVar"))) __attribute__((deprecated("warning")));
 @end
 
 __attribute__((objc_subclassing_restricted))
@@ -2967,13 +2967,13 @@ __attribute__((swift_name("TestDeprecation.NormalOverride")))
 - (int32_t)openNormal __attribute__((swift_name("openNormal()")));
 - (void)openWarning __attribute__((swift_name("openWarning()")));
 @property (readonly) id _Nullable openErrorVal __attribute__((swift_name("openErrorVal")));
-@property id _Nullable openErrorVar __attribute__((swift_name("openErrorVar")));
+@property (strong) id _Nullable openErrorVar __attribute__((swift_name("openErrorVar")));
 @property (readonly) id _Nullable openHiddenVal __attribute__((swift_name("openHiddenVal")));
-@property id _Nullable openHiddenVar __attribute__((swift_name("openHiddenVar")));
+@property (strong) id _Nullable openHiddenVar __attribute__((swift_name("openHiddenVar")));
 @property (readonly) id _Nullable openNormalVal __attribute__((swift_name("openNormalVal")));
-@property id _Nullable openNormalVar __attribute__((swift_name("openNormalVar")));
+@property (strong) id _Nullable openNormalVar __attribute__((swift_name("openNormalVar")));
 @property (readonly) id _Nullable openWarningVal __attribute__((swift_name("openWarningVal")));
-@property id _Nullable openWarningVar __attribute__((swift_name("openWarningVar")));
+@property (strong) id _Nullable openWarningVar __attribute__((swift_name("openWarningVar")));
 @end
 
 __attribute__((objc_subclassing_restricted))
@@ -3118,7 +3118,7 @@ __attribute__((swift_name("TestStringConversion")))
 @interface KtTestStringConversion : KtBase
 - (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer));
 + (instancetype)new __attribute__((availability(swift, unavailable, message="use object initializers instead")));
-@property id str __attribute__((swift_name("str")));
+@property (strong) id str __attribute__((swift_name("str")));
 @end
 
 __attribute__((swift_name("GH3825")))
@@ -3333,14 +3333,14 @@ __attribute__((swift_name("ValuesKt")))
 + (void)warning __attribute__((swift_name("warning()"))) __attribute__((deprecated("warning")));
 @property (class, readonly) int32_t PROPERTY_NAME_MUST_NOT_BE_ALTERED_BY_SWIFT __attribute__((swift_name("PROPERTY_NAME_MUST_NOT_BE_ALTERED_BY_SWIFT")));
 @property (class, readonly) NSArray<id> *anyList __attribute__((swift_name("anyList")));
-@property (class) id anyValue __attribute__((swift_name("anyValue")));
+@property (class, strong) id anyValue __attribute__((swift_name("anyValue")));
 @property (class, readonly) id boolAnyVal __attribute__((swift_name("boolAnyVal")));
 @property (class, readonly) BOOL boolVal __attribute__((swift_name("boolVal")));
 @property (class, readonly) double dbl __attribute__((swift_name("dbl")));
-@property (class) KtKotlinArray *delegatedGlobalArray __attribute__((swift_name("delegatedGlobalArray")));
+@property (class, strong) KtKotlinArray *delegatedGlobalArray __attribute__((swift_name("delegatedGlobalArray")));
 @property (class, readonly) NSArray<NSString *> *delegatedList __attribute__((swift_name("delegatedList")));
 @property (class, readonly) id _Nullable errorVal __attribute__((swift_name("errorVal"))) __attribute__((unavailable("error")));
-@property (class) id _Nullable errorVar __attribute__((swift_name("errorVar"))) __attribute__((unavailable("error")));
+@property (class, strong) id _Nullable errorVar __attribute__((swift_name("errorVar"))) __attribute__((unavailable("error")));
 @property (class, readonly) float flt __attribute__((swift_name("flt")));
 @property (class) int32_t gh3525BaseInitCount __attribute__((swift_name("gh3525BaseInitCount")));
 @property (class) int32_t gh3525InitCount __attribute__((swift_name("gh3525InitCount")));
@@ -3348,21 +3348,21 @@ __attribute__((swift_name("ValuesKt")))
 @property (class, readonly) float infFloatVal __attribute__((swift_name("infFloatVal")));
 @property (class) int32_t intVar __attribute__((swift_name("intVar")));
 @property (class, readonly) int32_t integer __attribute__((swift_name("integer")));
-@property (class) id lateinitIntVar __attribute__((swift_name("lateinitIntVar")));
+@property (class, strong) id lateinitIntVar __attribute__((swift_name("lateinitIntVar")));
 @property (class, readonly) NSString *lazyVal __attribute__((swift_name("lazyVal")));
 @property (class, readonly) int64_t longInt __attribute__((swift_name("longInt")));
-@property (class) id maxDoubleVal __attribute__((swift_name("maxDoubleVal")));
-@property (class) id minDoubleVal __attribute__((swift_name("minDoubleVal")));
+@property (class, strong) id maxDoubleVal __attribute__((swift_name("maxDoubleVal")));
+@property (class, strong) id minDoubleVal __attribute__((swift_name("minDoubleVal")));
 @property (class, readonly) double nanDoubleVal __attribute__((swift_name("nanDoubleVal")));
 @property (class, readonly) float nanFloatVal __attribute__((swift_name("nanFloatVal")));
 @property (class, readonly) id _Nullable nullVal __attribute__((swift_name("nullVal")));
-@property (class) NSString * _Nullable nullVar __attribute__((swift_name("nullVar")));
+@property (class, strong) NSString * _Nullable nullVar __attribute__((swift_name("nullVar")));
 @property (class, readonly) NSArray<id> *numbersList __attribute__((swift_name("numbersList")));
-@property (class) NSString *str __attribute__((swift_name("str")));
-@property (class) id strAsAny __attribute__((swift_name("strAsAny")));
+@property (class, strong) NSString *str __attribute__((swift_name("str")));
+@property (class, strong) id strAsAny __attribute__((swift_name("strAsAny")));
 @property (class, readonly) KtInt *(^sumLambda)(KtInt *, KtInt *) __attribute__((swift_name("sumLambda")));
 @property (class, readonly) id _Nullable warningVal __attribute__((swift_name("warningVal"))) __attribute__((deprecated("warning")));
-@property (class) id _Nullable warningVar __attribute__((swift_name("warningVar"))) __attribute__((deprecated("warning")));
+@property (class, strong) id _Nullable warningVar __attribute__((swift_name("warningVar"))) __attribute__((deprecated("warning")));
 @end
 
 __attribute__((swift_name("InvariantSuper")))

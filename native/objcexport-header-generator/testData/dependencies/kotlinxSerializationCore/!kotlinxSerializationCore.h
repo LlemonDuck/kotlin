@@ -202,7 +202,7 @@ __attribute__((objc_subclassing_restricted))
  * @note annotations
  *   kotlinx.serialization.ExperimentalSerializationApi
 */
-@property NSArray<id<KotlinAnnotation>> *annotations __attribute__((swift_name("annotations")));
+@property (strong) NSArray<id<KotlinAnnotation>> *annotations __attribute__((swift_name("annotations")));
 
 /**
  * @note annotations

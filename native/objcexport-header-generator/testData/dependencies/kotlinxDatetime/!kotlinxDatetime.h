@@ -588,22 +588,22 @@ __attribute__((objc_subclassing_restricted))
 - (LocalDateTime *)toLocalDateTime __attribute__((swift_name("toLocalDateTime()")));
 - (LocalTime *)toLocalTime __attribute__((swift_name("toLocalTime()")));
 - (UtcOffset *)toUtcOffset __attribute__((swift_name("toUtcOffset()")));
-@property AmPmMarker * _Nullable amPm __attribute__((swift_name("amPm")));
-@property Int * _Nullable dayOfMonth __attribute__((swift_name("dayOfMonth")));
-@property DayOfWeek * _Nullable dayOfWeek __attribute__((swift_name("dayOfWeek")));
-@property Int * _Nullable hour __attribute__((swift_name("hour")));
-@property Int * _Nullable hourOfAmPm __attribute__((swift_name("hourOfAmPm")));
-@property Int * _Nullable minute __attribute__((swift_name("minute")));
-@property Month * _Nullable month __attribute__((swift_name("month")));
-@property Int * _Nullable monthNumber __attribute__((swift_name("monthNumber")));
-@property Int * _Nullable nanosecond __attribute__((swift_name("nanosecond")));
-@property Int * _Nullable offsetHours __attribute__((swift_name("offsetHours")));
-@property Boolean * _Nullable offsetIsNegative __attribute__((swift_name("offsetIsNegative")));
-@property Int * _Nullable offsetMinutesOfHour __attribute__((swift_name("offsetMinutesOfHour")));
-@property Int * _Nullable offsetSecondsOfMinute __attribute__((swift_name("offsetSecondsOfMinute")));
-@property Int * _Nullable second __attribute__((swift_name("second")));
-@property NSString * _Nullable timeZoneId __attribute__((swift_name("timeZoneId")));
-@property Int * _Nullable year __attribute__((swift_name("year")));
+@property (strong) AmPmMarker * _Nullable amPm __attribute__((swift_name("amPm")));
+@property (strong) Int * _Nullable dayOfMonth __attribute__((swift_name("dayOfMonth")));
+@property (strong) DayOfWeek * _Nullable dayOfWeek __attribute__((swift_name("dayOfWeek")));
+@property (strong) Int * _Nullable hour __attribute__((swift_name("hour")));
+@property (strong) Int * _Nullable hourOfAmPm __attribute__((swift_name("hourOfAmPm")));
+@property (strong) Int * _Nullable minute __attribute__((swift_name("minute")));
+@property (strong) Month * _Nullable month __attribute__((swift_name("month")));
+@property (strong) Int * _Nullable monthNumber __attribute__((swift_name("monthNumber")));
+@property (strong) Int * _Nullable nanosecond __attribute__((swift_name("nanosecond")));
+@property (strong) Int * _Nullable offsetHours __attribute__((swift_name("offsetHours")));
+@property (strong) Boolean * _Nullable offsetIsNegative __attribute__((swift_name("offsetIsNegative")));
+@property (strong) Int * _Nullable offsetMinutesOfHour __attribute__((swift_name("offsetMinutesOfHour")));
+@property (strong) Int * _Nullable offsetSecondsOfMinute __attribute__((swift_name("offsetSecondsOfMinute")));
+@property (strong) Int * _Nullable second __attribute__((swift_name("second")));
+@property (strong) NSString * _Nullable timeZoneId __attribute__((swift_name("timeZoneId")));
+@property (strong) Int * _Nullable year __attribute__((swift_name("year")));
 @end
 
 __attribute__((objc_subclassing_restricted))
