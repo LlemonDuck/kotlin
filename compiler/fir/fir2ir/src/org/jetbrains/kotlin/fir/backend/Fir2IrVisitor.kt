@@ -163,7 +163,9 @@ class Fir2IrVisitor(
             if (delegatedConstructor != null) {
                 with(memberGenerator) {
                     irEnumEntry.initializerExpression = IrFactoryImpl.createExpressionBody(
-                        delegatedConstructor.toIrDelegatingConstructorCall()
+                        delegatedConstructor.convertWithOffsets { startOffset, endOffset ->
+                            delegatedConstructor.toIrDelegatingConstructorCall(startOffset, endOffset)
+                        }
                     )
                 }
             }
