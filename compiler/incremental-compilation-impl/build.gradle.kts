@@ -49,6 +49,7 @@ projectTest(parallel = true) {
 }
 
 projectTest("testJvmICWithJdk11", parallel = true) {
+    dependsOn(":dist")
     workingDir = rootDir
     useJsIrBoxTests(version = version, buildDir = layout.buildDirectory)
     filter {
