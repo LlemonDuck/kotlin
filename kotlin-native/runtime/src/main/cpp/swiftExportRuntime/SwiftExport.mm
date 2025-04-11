@@ -4,9 +4,6 @@
  */
 
 #include "SwiftExport.hpp"
-#include "Types.h"
-#include "ObjCExport.h"
-#include "KotlinBase.h"
 
 #if KONAN_OBJC_INTEROP
 
@@ -14,7 +11,9 @@
 #include "Memory.h"
 #include "WritableTypeInfo.hpp"
 #include "std_support/Atomic.hpp"
-#include "iostream"
+#include "Types.h"
+#include "ObjCExport.h"
+#include "KotlinBase.h"
 
 using namespace kotlin;
 
@@ -22,8 +21,7 @@ extern "C" RUNTIME_WEAK Class Kotlin_SwiftExport_wrapIntoExistential(Class) {
     RuntimeFail("Must only be used with Swift Export; overriden in KotlinRuntimeSupport.swift");
 }
 
-//namespace {
-
+namespace {
 
 NSString *PrettyStringFromClass(Class cls) {
     NSArray<NSString *> *protocols = ({
@@ -232,7 +230,7 @@ Class computeWrapperClass(const TypeInfo *&typeInfo, WrapperClassOptions options
     return bestFitting;
 }
 
-//} // namespace
+} // namespace
 
 Class swiftExportRuntime::bestFittingClassFor(const TypeInfo* typeInfo) noexcept {
     RuntimeAssert(compiler::swiftExport(), "Only available in Swift Export");

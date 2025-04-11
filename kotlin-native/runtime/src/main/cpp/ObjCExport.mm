@@ -1038,6 +1038,7 @@ static void setClassEnsureInitialized(const TypeInfo* typeInfo, Class cls) {
   objCExport(typeInfo).objCClass = cls;
 }
 
+// TODO: KT-76128 – With swift export, this method should return the best fitting swift class, while class creation facilities should be moved elsewhere
 static Class getOrCreateClass(const TypeInfo* typeInfo) {
   Class result = objCExport(typeInfo).objCClass;
   if (result != nullptr) {

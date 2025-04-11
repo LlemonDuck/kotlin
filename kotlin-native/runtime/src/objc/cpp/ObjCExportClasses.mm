@@ -261,11 +261,6 @@ using RegularRef = kotlin::mm::ObjCBackRef;
         return self;
     }
 
-    RuntimeAssert(
-            [[newSelf class] isSubclassOfClass:[self class]],
-            "During initialization of %p (%s) for Kotlin object %p trying to replace self with %p (%s) that is not a subclass", self,
-            class_getName([self class]), regularRef.ref(), newSelf, class_getName([newSelf class]));
-
     KotlinBase* retiredSelf = self; // old `self`
     self = [newSelf retain]; // new `self`, retained.
 
