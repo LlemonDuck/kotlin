@@ -114,7 +114,7 @@ class JavacWrapper(
         // use rt.jar instead of lib/ct.sym
         fileManager.setSymbolFileEnabled(false)
         bootClasspath?.let {
-            val cp = fileManager.getLocation(PLATFORM_CLASS_PATH) + jvmClasspathRoots
+            val cp = fileManager.getLocation(CLASS_PATH) + jvmClasspathRoots
             fileManager.setLocation(PLATFORM_CLASS_PATH, it)
             fileManager.setLocation(CLASS_PATH, cp)
         } ?: fileManager.setLocation(CLASS_PATH, jvmClasspathRoots)

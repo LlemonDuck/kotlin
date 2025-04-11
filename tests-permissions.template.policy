@@ -2,12 +2,6 @@ grant codeBase "file:{{gradle_user_home}}/-" {
     permission java.security.AllPermission;
 };
 grant {
-    permission java.io.FilePermission "/usr/lib/java", "read";
-    permission java.io.FilePermission "/Library/Java/Extensions", "read";
-    permission java.io.FilePermission "/System/Library/Java/Extensions", "read";
-    permission java.io.FilePermission "/Network/Library/Java/Extensions", "read";
-    permission java.io.FilePermission "/Users/cristiangarcia/Library/Java/Extensions", "read";
-    permission java.io.FilePermission "/Users/cristiangarcia/Library/Java/Extensions/-", "read";
     // Basic permissions needed for tests to run
     permission java.lang.RuntimePermission "*";
     permission java.net.SocketPermission "127.0.0.1:0", "connect,resolve";
