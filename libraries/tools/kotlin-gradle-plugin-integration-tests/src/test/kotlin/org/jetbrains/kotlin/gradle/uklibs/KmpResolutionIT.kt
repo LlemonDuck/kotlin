@@ -6,9 +6,14 @@
 package org.jetbrains.kotlin.gradle.uklibs
 
 import org.gradle.util.GradleVersion
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.testbase.*
 import org.jetbrains.kotlin.gradle.testing.*
+import org.jetbrains.kotlin.gradle.testing.PrettyPrint
+import org.jetbrains.kotlin.gradle.testing.ResolvedComponentWithArtifacts
 import org.junit.jupiter.api.DisplayName
+import kotlin.String
+import kotlin.collections.Map
 import kotlin.test.assertEquals
 
 @MppGradlePluginTests
@@ -64,6 +69,13 @@ class KmpResolutionIT : KGPBaseTest() {
                 listOf("commonMain", "org.jetbrains.kotlin-kotlin-stdlib-${consumer.buildOptions.kotlinVersion}-commonMain-.klib"),
                 listOf("commonMain", "foo-transitive-1.0-commonMain-.klib"),
             ).prettyPrinted, consumer.metadataTransformationOutputClasspath("linuxMain")
+                .relativeTransformationPathComponents().prettyPrinted
+        )
+        assertEquals<PrettyPrint<List<List<String>>>>(
+            mutableListOf<MutableList<String>>(
+                mutableListOf("commonMain", "org.jetbrains.kotlin-kotlin-stdlib-${consumer.buildOptions.kotlinVersion}-commonMain-.klib"),
+                mutableListOf("commonMain", "foo-transitive-1.0-commonMain-.klib"),
+            ).prettyPrinted, consumer.metadataTransformationOutputClasspath("iosMain")
                 .relativeTransformationPathComponents().prettyPrinted
         )
 
@@ -230,8 +242,8 @@ class KmpResolutionIT : KGPBaseTest() {
             transitiveConfiguration = {
                 buildScriptInjection {
                     project.applyMultiplatform {
-                        sourceSets.commonMain.get().addIdentifierClass()
-                        sourceSets.linuxMain.get().addIdentifierClass()
+                        sourceSets.commonMain.get().compileStubSourceWithSourceSetName()
+                        sourceSets.linuxMain.get().compileStubSourceWithSourceSetName()
                     }
                 }
             },
@@ -240,7 +252,7 @@ class KmpResolutionIT : KGPBaseTest() {
                     project.setUklibPublicationStrategy()
                     project.applyMultiplatform {
                         // Now it can't have linuxMain due to bamboos
-                        sourceSets.commonMain.get().addIdentifierClass()
+                        sourceSets.commonMain.get().compileStubSourceWithSourceSetName()
                     }
                 }
             },
@@ -323,7 +335,7 @@ class KmpResolutionIT : KGPBaseTest() {
                     ),
                     configuration = "jvmApiElements-published",
                 ),
-                "org.jetbrains.kotlin:kotlin-stdlib:2.2.255-SNAPSHOT" to ResolvedComponentWithArtifacts(
+                "org.jetbrains.kotlin:kotlin-stdlib:${defaultBuildOptions.kotlinVersion}" to ResolvedComponentWithArtifacts(
                     artifacts = mutableListOf(
                         mutableMapOf(
                             "artifactType" to "jar",
@@ -378,7 +390,7 @@ class KmpResolutionIT : KGPBaseTest() {
                     ),
                     configuration = "iosArm64ApiElements-published",
                 ),
-                "org.jetbrains.kotlin:kotlin-stdlib:2.2.255-SNAPSHOT" to ResolvedComponentWithArtifacts(
+                "org.jetbrains.kotlin:kotlin-stdlib:${defaultBuildOptions.kotlinVersion}" to ResolvedComponentWithArtifacts(
                     artifacts = mutableListOf(
                     ),
                     configuration = "nativeApiElements",
@@ -419,7 +431,7 @@ class KmpResolutionIT : KGPBaseTest() {
                     ),
                     configuration = "linuxArm64ApiElements-published",
                 ),
-                "org.jetbrains.kotlin:kotlin-stdlib:2.2.255-SNAPSHOT" to ResolvedComponentWithArtifacts(
+                "org.jetbrains.kotlin:kotlin-stdlib:${defaultBuildOptions.kotlinVersion}" to ResolvedComponentWithArtifacts(
                     artifacts = mutableListOf(
                     ),
                     configuration = "nativeApiElements",
@@ -439,8 +451,8 @@ class KmpResolutionIT : KGPBaseTest() {
                 buildScriptInjection {
                     project.setUklibPublicationStrategy()
                     project.applyMultiplatform {
-                        sourceSets.commonMain.get().addIdentifierClass()
-                        sourceSets.linuxMain.get().addIdentifierClass()
+                        sourceSets.commonMain.get().compileStubSourceWithSourceSetName()
+                        sourceSets.linuxMain.get().compileStubSourceWithSourceSetName()
                     }
                 }
             },
@@ -450,7 +462,7 @@ class KmpResolutionIT : KGPBaseTest() {
                     project.setUklibPublicationStrategy()
                     project.setUklibResolutionStrategy()
                     project.applyMultiplatform {
-                        sourceSets.commonMain.get().addIdentifierClass()
+                        sourceSets.commonMain.get().compileStubSourceWithSourceSetName()
                     }
                 }
             },
@@ -527,12 +539,12 @@ class KmpResolutionIT : KGPBaseTest() {
                     ),
                     configuration = "uklibApiElements",
                 ),
-                "org.jetbrains.kotlin:kotlin-dom-api-compat:2.2.255-SNAPSHOT" to ResolvedComponentWithArtifacts(
+                "org.jetbrains.kotlin:kotlin-dom-api-compat:${defaultBuildOptions.kotlinVersion}" to ResolvedComponentWithArtifacts(
                     artifacts = mutableListOf(
                     ),
                     configuration = "commonFakeApiElements-published",
                 ),
-                "org.jetbrains.kotlin:kotlin-stdlib:2.2.255-SNAPSHOT" to ResolvedComponentWithArtifacts(
+                "org.jetbrains.kotlin:kotlin-stdlib:${defaultBuildOptions.kotlinVersion}" to ResolvedComponentWithArtifacts(
                     artifacts = mutableListOf(
                         mutableMapOf(
                             "artifactType" to "jar",
@@ -580,12 +592,12 @@ class KmpResolutionIT : KGPBaseTest() {
                     ),
                     configuration = "uklibApiElements",
                 ),
-                "org.jetbrains.kotlin:kotlin-dom-api-compat:2.2.255-SNAPSHOT" to ResolvedComponentWithArtifacts(
+                "org.jetbrains.kotlin:kotlin-dom-api-compat:${defaultBuildOptions.kotlinVersion}" to ResolvedComponentWithArtifacts(
                     artifacts = mutableListOf(
                     ),
                     configuration = "commonFakeApiElements-published",
                 ),
-                "org.jetbrains.kotlin:kotlin-stdlib:2.2.255-SNAPSHOT" to ResolvedComponentWithArtifacts(
+                "org.jetbrains.kotlin:kotlin-stdlib:${defaultBuildOptions.kotlinVersion}" to ResolvedComponentWithArtifacts(
                     artifacts = mutableListOf(
                     ),
                     configuration = "nativeApiElements",
@@ -620,12 +632,12 @@ class KmpResolutionIT : KGPBaseTest() {
                     ),
                     configuration = "uklibApiElements",
                 ),
-                "org.jetbrains.kotlin:kotlin-dom-api-compat:2.2.255-SNAPSHOT" to ResolvedComponentWithArtifacts(
+                "org.jetbrains.kotlin:kotlin-dom-api-compat:${defaultBuildOptions.kotlinVersion}" to ResolvedComponentWithArtifacts(
                     artifacts = mutableListOf(
                     ),
                     configuration = "commonFakeApiElements-published",
                 ),
-                "org.jetbrains.kotlin:kotlin-stdlib:2.2.255-SNAPSHOT" to ResolvedComponentWithArtifacts(
+                "org.jetbrains.kotlin:kotlin-stdlib:${defaultBuildOptions.kotlinVersion}" to ResolvedComponentWithArtifacts(
                     artifacts = mutableListOf(
                     ),
                     configuration = "nativeApiElements",
@@ -644,8 +656,8 @@ class KmpResolutionIT : KGPBaseTest() {
                 buildScriptInjection {
                     project.setUklibPublicationStrategy()
                     project.applyMultiplatform {
-                        sourceSets.commonMain.get().addIdentifierClass()
-                        sourceSets.linuxMain.get().addIdentifierClass()
+                        sourceSets.commonMain.get().compileStubSourceWithSourceSetName()
+                        sourceSets.linuxMain.get().compileStubSourceWithSourceSetName()
                     }
                 }
             },
@@ -653,8 +665,8 @@ class KmpResolutionIT : KGPBaseTest() {
                 buildScriptInjection {
                     project.setUklibResolutionStrategy()
                     project.applyMultiplatform {
-                        sourceSets.commonMain.get().addIdentifierClass()
-                        sourceSets.linuxMain.get().addIdentifierClass()
+                        sourceSets.commonMain.get().compileStubSourceWithSourceSetName()
+                        sourceSets.linuxMain.get().compileStubSourceWithSourceSetName()
                     }
                 }
             },
@@ -696,6 +708,13 @@ class KmpResolutionIT : KGPBaseTest() {
             ).prettyPrinted, consumer.metadataTransformationOutputClasspath("linuxMain")
                 .relativeTransformationPathComponents().prettyPrinted
         )
+        assertEquals<PrettyPrint<List<List<String>>>>(
+            mutableListOf<MutableList<String>>(
+                mutableListOf("commonMain", "org.jetbrains.kotlin-kotlin-stdlib-${consumer.buildOptions.kotlinVersion}-commonMain-.klib"),
+                mutableListOf("commonMain", "uklib-foo-transitive-1.0-commonMain-"),
+            ).prettyPrinted, consumer.metadataTransformationOutputClasspath("iosMain")
+                .relativeTransformationPathComponents().prettyPrinted
+        )
 
         val jvmDependencies = consumer.buildScriptReturn {
             project.ignoreAccessViolations {
@@ -733,12 +752,12 @@ class KmpResolutionIT : KGPBaseTest() {
                     ),
                     configuration = "uklibApiElements",
                 ),
-                "org.jetbrains.kotlin:kotlin-dom-api-compat:2.2.255-SNAPSHOT" to ResolvedComponentWithArtifacts(
+                "org.jetbrains.kotlin:kotlin-dom-api-compat:${defaultBuildOptions.kotlinVersion}" to ResolvedComponentWithArtifacts(
                     artifacts = mutableListOf(
                     ),
                     configuration = "commonFakeApiElements-published",
                 ),
-                "org.jetbrains.kotlin:kotlin-stdlib:2.2.255-SNAPSHOT" to ResolvedComponentWithArtifacts(
+                "org.jetbrains.kotlin:kotlin-stdlib:${defaultBuildOptions.kotlinVersion}" to ResolvedComponentWithArtifacts(
                     artifacts = mutableListOf(
                         mutableMapOf(
                             "artifactType" to "jar",
@@ -786,12 +805,12 @@ class KmpResolutionIT : KGPBaseTest() {
                     ),
                     configuration = "uklibApiElements",
                 ),
-                "org.jetbrains.kotlin:kotlin-dom-api-compat:2.2.255-SNAPSHOT" to ResolvedComponentWithArtifacts(
+                "org.jetbrains.kotlin:kotlin-dom-api-compat:${defaultBuildOptions.kotlinVersion}" to ResolvedComponentWithArtifacts(
                     artifacts = mutableListOf(
                     ),
                     configuration = "commonFakeApiElements-published",
                 ),
-                "org.jetbrains.kotlin:kotlin-stdlib:2.2.255-SNAPSHOT" to ResolvedComponentWithArtifacts(
+                "org.jetbrains.kotlin:kotlin-stdlib:${defaultBuildOptions.kotlinVersion}" to ResolvedComponentWithArtifacts(
                     artifacts = mutableListOf(
                     ),
                     configuration = "nativeApiElements",
@@ -832,12 +851,12 @@ class KmpResolutionIT : KGPBaseTest() {
                     ),
                     configuration = "uklibApiElements",
                 ),
-                "org.jetbrains.kotlin:kotlin-dom-api-compat:2.2.255-SNAPSHOT" to ResolvedComponentWithArtifacts(
+                "org.jetbrains.kotlin:kotlin-dom-api-compat:${defaultBuildOptions.kotlinVersion}" to ResolvedComponentWithArtifacts(
                     artifacts = mutableListOf(
                     ),
                     configuration = "commonFakeApiElements-published",
                 ),
-                "org.jetbrains.kotlin:kotlin-stdlib:2.2.255-SNAPSHOT" to ResolvedComponentWithArtifacts(
+                "org.jetbrains.kotlin:kotlin-stdlib:${defaultBuildOptions.kotlinVersion}" to ResolvedComponentWithArtifacts(
                     artifacts = mutableListOf(
                     ),
                     configuration = "nativeApiElements",
@@ -846,12 +865,162 @@ class KmpResolutionIT : KGPBaseTest() {
         )
     }
 
+    /**
+     * FIXME: Test Java base plugin resolution in detail because we use different resolvable configuration for Java compilations and
+     * Kotlin jvm compilations
+     */
+    @GradleTest
+    fun `smoke lenient java consumption - java resolvable configurations can fallback to metadata`(
+        version: GradleVersion,
+    ) {
+        val producer = project("empty", version) {
+            addKgpToBuildScriptCompilationClasspath()
+            buildScriptInjection {
+                project.applyMultiplatform {
+                    linuxArm64()
+                    linuxX64()
+                    sourceSets.commonMain.get().compileStubSourceWithSourceSetName()
+                }
+            }
+        }.publish(publisherConfiguration = PublisherConfiguration(group = "producer"))
+
+        project("empty", version) {
+            addKgpToBuildScriptCompilationClasspath()
+            addPublishedProjectToRepositories(producer)
+            buildScriptInjection {
+                project.setUklibResolutionStrategy()
+                project.applyMultiplatform {
+                    jvm()
+                    sourceSets.commonMain.get().compileStubSourceWithSourceSetName()
+                    sourceSets.commonMain.dependencies {
+                        api(producer.rootCoordinate)
+                    }
+                }
+            }
+
+            assertEquals<PrettyPrint<Map<String, ResolvedComponentWithArtifacts>>>(
+                mutableMapOf<String, ResolvedComponentWithArtifacts>(
+                    "org.jetbrains.kotlin:kotlin-stdlib:${buildOptions.kotlinVersion}" to ResolvedComponentWithArtifacts(
+                        artifacts = mutableListOf(
+                            mutableMapOf(
+                                "artifactType" to "jar",
+                                "org.gradle.category" to "library",
+                                "org.gradle.jvm.environment" to "standard-jvm",
+                                "org.gradle.libraryelements" to "jar",
+                                "org.gradle.usage" to "java-api",
+                                "org.jetbrains.kotlin.isMetadataJar" to "not-a-metadata-jar",
+                                "org.jetbrains.kotlin.platform.type" to "jvm",
+                            ),
+                        ),
+                        configuration = "jvmApiElements",
+                    ),
+                    "org.jetbrains:annotations:13.0" to ResolvedComponentWithArtifacts(
+                        artifacts = mutableListOf(
+                            mutableMapOf(
+                                "artifactType" to "jar",
+                                "org.gradle.category" to "library",
+                                "org.gradle.libraryelements" to "jar",
+                                "org.gradle.usage" to "java-api",
+                                "org.jetbrains.kotlin.isMetadataJar" to "not-a-metadata-jar",
+                            ),
+                        ),
+                        configuration = "compile",
+                    ),
+                    "producer:empty:1.0" to ResolvedComponentWithArtifacts(
+                        artifacts = mutableListOf(
+                        ),
+                        configuration = "metadataApiElements",
+                    ),
+                ).prettyPrinted,
+                buildScriptReturn {
+                    project.ignoreAccessViolations {
+                        project.configurations.getByName(
+                            java.sourceSets.getByName("jvmMain").compileClasspathConfigurationName
+                        ).resolveProjectDependencyComponentsWithArtifacts()
+                    }
+                }.buildAndReturn("assemble").prettyPrinted
+            )
+        }
+    }
+
+    @GradleTest
+    fun `java consumption - with direct lenient Uklib producer and a native-only transitive producer - results in a resolution failure in the consumer`(
+        version: GradleVersion,
+    ) {
+        val transitive = project("empty", version) {
+            addKgpToBuildScriptCompilationClasspath()
+            buildScriptInjection {
+                project.applyMultiplatform {
+                    linuxArm64()
+                    linuxX64()
+                    sourceSets.commonMain.get().compileStubSourceWithSourceSetName()
+                }
+            }
+        }.publish(publisherConfiguration = PublisherConfiguration(group = "transitive"))
+
+        val direct = project("empty", version) {
+            addKgpToBuildScriptCompilationClasspath()
+            addPublishedProjectToRepositories(transitive)
+            buildScriptInjection {
+                project.setUklibPublicationStrategy()
+                project.setUklibResolutionStrategy()
+                project.applyMultiplatform {
+                    linuxArm64()
+                    linuxX64()
+                    jvm()
+                    sourceSets.commonMain.get().compileStubSourceWithSourceSetName()
+                    sourceSets.commonMain.dependencies {
+                        api(transitive.rootCoordinate)
+                    }
+                }
+            }
+        }.publish(publisherConfiguration = PublisherConfiguration(group = "direct"))
+
+        project("empty", version) {
+            addKgpToBuildScriptCompilationClasspath()
+            addPublishedProjectToRepositories(transitive)
+            addPublishedProjectToRepositories(direct)
+            buildScriptInjection {
+                project.plugins.apply("java-library")
+                project.configurations.named("implementation").configure {
+                    it.dependencies.add(project.dependencies.create(direct.rootCoordinate))
+                }
+                java.sourceSets.getByName("main").compileJavaSource(
+                    project,
+                    className = "Consumer",
+                    """
+                        public class Consumer { }
+                    """.trimIndent()
+                )
+            }
+
+            // FIXME: Properly test which configuration failed to resolve
+            buildAndFail("assemble") {
+                assertOutputContains("No matching variant of transitive:empty:1.0 was found")
+            }
+        }
+    }
+
     private fun transitiveConsumptionCase(
         gradleVersion: GradleVersion,
         transitiveConfiguration: TestProject.() -> Unit,
         directConfiguration: TestProject.() -> Unit,
         consumerConfiguration: TestProject.() -> Unit,
     ): TestProject {
+        val consumedTargetConfiguration: KotlinMultiplatformExtension.() -> Unit = {
+            js()
+            jvm()
+            iosArm64()
+            iosX64()
+            linuxArm64()
+            linuxX64()
+        }
+        val intermediateSubsetTargetConfiguration: KotlinMultiplatformExtension.() -> Unit = {
+            linuxArm64()
+            linuxX64()
+        }
+
+
         val transitiveProducer = project("empty", gradleVersion) {
             settingsBuildScriptInjection {
                 settings.rootProject.name = "transitive"
@@ -861,12 +1030,7 @@ class KmpResolutionIT : KGPBaseTest() {
             buildScriptInjection {
                 project.enableCrossCompilation()
                 project.applyMultiplatform {
-                    js()
-                    jvm()
-                    iosArm64()
-                    iosX64()
-                    linuxArm64()
-                    linuxX64()
+                    consumedTargetConfiguration()
                 }
             }
         }.publish(publisherConfiguration = PublisherConfiguration(group = "foo"))
@@ -881,9 +1045,7 @@ class KmpResolutionIT : KGPBaseTest() {
             buildScriptInjection {
                 project.enableCrossCompilation()
                 project.applyMultiplatform {
-                    linuxArm64()
-                    linuxX64()
-
+                    intermediateSubsetTargetConfiguration()
                     sourceSets.commonMain.get().dependencies {
                         api(transitiveProducer.rootCoordinate)
                     }
@@ -903,13 +1065,7 @@ class KmpResolutionIT : KGPBaseTest() {
                 project.computeTransformedLibraryChecksum(false)
                 project.enableCrossCompilation()
                 project.applyMultiplatform {
-                    js()
-                    jvm()
-                    iosArm64()
-                    iosX64()
-                    linuxArm64()
-                    linuxX64()
-
+                    consumedTargetConfiguration()
                     sourceSets.commonMain.get().dependencies {
                         implementation(directProducer.rootCoordinate)
                     }
