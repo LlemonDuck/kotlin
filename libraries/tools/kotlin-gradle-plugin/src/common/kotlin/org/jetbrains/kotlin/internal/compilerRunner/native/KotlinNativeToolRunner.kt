@@ -29,7 +29,9 @@ import org.jetbrains.kotlin.gradle.plugin.statistics.NativeArgumentMetrics
 import org.jetbrains.kotlin.gradle.utils.escapeStringCharacters
 import org.jetbrains.kotlin.konan.target.HostManager
 import org.jetbrains.kotlin.statistics.FusMetricRetrievalException
+import org.jetbrains.kotlin.util.PhaseType
 import org.jetbrains.kotlin.util.UnitStats
+import org.jetbrains.kotlin.util.forEachPhaseMeasurement
 import java.io.File
 import java.io.IOException
 import java.io.PrintWriter
@@ -296,11 +298,19 @@ internal abstract class KotlinNativeToolRunner @Inject constructor(
         try {
             val unitStats = Gson().fromJson(jsonFile.readText(), UnitStats::class.java)
 
-            unitStats?.analysisStats?.nanos?.also { addTimeMetricNs(GradleBuildTime.CODE_ANALYSIS, it) }
-            unitStats?.initStats?.nanos?.also { addTimeMetricNs(GradleBuildTime.COMPILER_INITIALIZATION, it) }
-            unitStats?.translationToIrStats?.nanos?.also { addTimeMetricNs(GradleBuildTime.TRANSLATION_TO_IR, it) }
-            unitStats?.irLoweringStats?.nanos?.also { addTimeMetricNs(GradleBuildTime.IR_LOWERING, it) }
-            unitStats?.backendStats?.nanos?.also { addTimeMetricNs(GradleBuildTime.BACKEND, it) }
+            unitStats.forEachPhaseMeasurement { type, time ->
+                if (time == null) return@forEachPhaseMeasurement
+
+                val gradleBuildTime = when (type) {
+                    PhaseType.Initialization -> GradleBuildTime.CODE_ANALYSIS
+                    PhaseType.Analysis -> GradleBuildTime.COMPILER_INITIALIZATION
+                    PhaseType.TranslationToIr -> GradleBuildTime.TRANSLATION_TO_IR
+                    PhaseType.IrLowering -> GradleBuildTime.IR_LOWERING
+                    PhaseType.Backend -> GradleBuildTime.BACKEND
+                }
+
+                addTimeMetricNs(gradleBuildTime, time.nanos)
+            }
         } catch (e: Exception) {
             errorMessageCollector.report(FusMetricRetrievalException("Failed to parse metrics from file ${jsonFile.absolutePath}", e), location = null)
         }
