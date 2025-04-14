@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
 public class AtomicfuNativeTestGenerated extends AbstractNativeCodegenBoxTest {
   @Test
   public void testAllFilesPresentInBox() {
-    KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("plugins/atomicfu/atomicfu-compiler/testData/box"), Pattern.compile("^(.+)\\.kt$"), null, TargetBackend.NATIVE, true);
+    KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("plugins/atomicfu/atomicfu-compiler/testData/box"), Pattern.compile("^(.+)\\.kt$"), null, TargetBackend.NATIVE, true, "context_parameters");
   }
 
   @Nested
@@ -208,26 +208,6 @@ public class AtomicfuNativeTestGenerated extends AbstractNativeCodegenBoxTest {
     @TestMetadata("UncheckedCastTest.kt")
     public void testUncheckedCastTest() {
       runTest("plugins/atomicfu/atomicfu-compiler/testData/box/atomics_basic/UncheckedCastTest.kt");
-    }
-  }
-
-  @Nested
-  @TestMetadata("plugins/atomicfu/atomicfu-compiler/testData/box/context_parameters")
-  @TestDataPath("$PROJECT_ROOT")
-  @Tag("atomicfu-native")
-  @EnforcedHostTarget()
-  @ClassicPipeline()
-  @UseExtTestCaseGroupProvider()
-  public class Context_parameters {
-    @Test
-    public void testAllFilesPresentInContext_parameters() {
-      KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("plugins/atomicfu/atomicfu-compiler/testData/box/context_parameters"), Pattern.compile("^(.+)\\.kt$"), null, TargetBackend.NATIVE, true);
-    }
-
-    @Test
-    @TestMetadata("ContextReceiverParametersTest.kt")
-    public void testContextReceiverParametersTest() {
-      runTest("plugins/atomicfu/atomicfu-compiler/testData/box/context_parameters/ContextReceiverParametersTest.kt");
     }
   }
 
