@@ -16,6 +16,7 @@ grant {
     permission java.util.PropertyPermission "project.structure.add.tools.jar.to.new.jdk", "write";
     permission java.util.PropertyPermission "ide.hide.excluded.files", "write";
     permission java.util.PropertyPermission "ast.loading.filter", "write";
+    permission java.util.PropertyPermission "java.ext.dirs", "write";
     permission java.util.PropertyPermission "platform.random.idempotence.check.rate", "write";
     permission java.util.PropertyPermission "apple.awt.UIElement", "write";
     permission java.io.FilePermission "{{gradle_user_home}}/-", "read,write,delete,execute";
