@@ -176,60 +176,55 @@ using RegularRef = kotlin::mm::ObjCBackRef;
   return [self retain];
 }
 
-- (instancetype)initWithExternalRCRef:(void *)ref {
++ (id)createWithExternalRCRef:(void *)ref {
     RuntimeAssert(kotlin::compiler::swiftExport(), "Must be used in Swift Export only");
     kotlin::AssertThreadState(kotlin::ThreadState::kNative);
 
     auto externalRCRef = reinterpret_cast<kotlin::mm::RawExternalRCRef*>(ref);
-    Class bestFittingClass =
-            kotlin::swiftExportRuntime::bestFittingClassFor(kotlin::mm::typeOfExternalRCRef(externalRCRef));
-    if ([self class] != bestFittingClass) {
-        if ([[self class] isSubclassOfClass:bestFittingClass]) {
+    Class bestFittingClass = kotlin::swiftExportRuntime::bestFittingClassFor(kotlin::mm::typeOfExternalRCRef(externalRCRef));
+
+    if (self != bestFittingClass) {
+        if ([self isSubclassOfClass:bestFittingClass]) {
             konan::consoleErrorf(
-                    "Inheritance from Kotlin exported classes is not supported: %s inherits from %s\n", class_getName([self class]),
+                    "Inheritance from Kotlin exported classes is not supported: %s inherits from %s\n", class_getName(self),
                     class_getName(bestFittingClass));
             kotlin::PrintStackTraceStderr();
             std::abort();
         }
         RuntimeAssert(
-                [bestFittingClass isSubclassOfClass:[self class]], "Best-fitting class is %s which is not a subclass of self (%s)",
-                class_getName(bestFittingClass), class_getName([self class]));
+                [bestFittingClass isSubclassOfClass:self], "Best-fitting class is %s which is not a subclass of self (%s)",
+                class_getName(bestFittingClass), class_getName(self));
 
-        KotlinBase* retiredSelf = self; // old `self`
-
-        // Rerun the entire initializer, but with the best-fitting class now.
-        self = [[bestFittingClass alloc] initWithExternalRCRefUnsafe:ref]; // new `self`, retained.
-
-        // Fully release old `self` by just decrementing NSObject refcount.
-        [retiredSelf releaseAsAssociatedObject];
-
-        // Return new `self`.
-        return self;
+        // Call unsafe initializer with the best-fitting class.
+        return [[bestFittingClass alloc] initWithExternalRCRefUnsafe:ref cache:YES substitute:YES];
+    } else {
+        return [[self alloc] initWithExternalRCRefUnsafe:ref cache:YES substitute:YES];
     }
-
-    return [self initWithExternalRCRefUnsafe:ref];
 }
 
-- (instancetype)initAsExistentialWrappingExternalRCRef:(void *)ref {
++ (id)createExistentialWrappingExternalRCRef:(void *)ref {
     RuntimeAssert(kotlin::compiler::swiftExport(), "Must be used in Swift Export only");
     kotlin::AssertThreadState(kotlin::ThreadState::kNative);
 
     auto externalRCRef = reinterpret_cast<kotlin::mm::RawExternalRCRef*>(ref);
 
     const TypeInfo *typeInfo = kotlin::mm::typeOfExternalRCRef(externalRCRef);
-    Class bestFittingClass = kotlin::swiftExportRuntime::existentialWrapperClassFor(typeInfo)
-            ?: kotlin::swiftExportRuntime::bestFittingClassFor(typeInfo);
+    Class wrapperClass = kotlin::swiftExportRuntime::existentialWrapperClassFor(typeInfo);
+    Class bestFittingClass = kotlin::swiftExportRuntime::bestFittingClassFor(typeInfo);
 
-     if ([self class] == bestFittingClass) {
-         return [self initWithExternalRCRef:ref];
-     } else {
-         return [[bestFittingClass alloc] initWithExternalRCRefUnsafe:ref];
-     }
-
-     return self;
+    if (wrapperClass == bestFittingClass) {
+         return [bestFittingClass createWithExternalRCRef:ref];
+    } else {
+         return [[wrapperClass alloc] initWithExternalRCRefUnsafe:ref cache:NO substitute:YES];
+    }
 }
 
-- (instancetype)initWithExternalRCRefUnsafe:(void *)ref {
+- (instancetype)init {
+    RuntimeAssert(false, "Should never be called?");
+    return [super init];
+}
+
+- (instancetype)initWithExternalRCRefUnsafe:(void *)ref cache:(BOOL)shouldCache substitute:(BOOL)shouldSubstitute {
     RuntimeAssert(kotlin::compiler::swiftExport(), "Must be used in Swift Export only");
     kotlin::AssertThreadState(kotlin::ThreadState::kNative);
 

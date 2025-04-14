@@ -5,6 +5,7 @@
 
 package org.jetbrains.sir.lightclasses.nodes
 
+import com.intellij.util.containers.addAllIfNotNull
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.components.DefaultTypeClassIds
 import org.jetbrains.kotlin.analysis.api.export.utilities.isCloneable
@@ -148,11 +149,19 @@ internal abstract class SirAbstractClassFromKtSymbol(
         visibility = SirVisibility.PACKAGE // Hide from users, but not from other Swift Export modules.
         isFailable = false
         isOverride = true
-        parameters.add(
+        parameters.addAllIfNotNull(
             SirParameter(
-                argumentName = "__externalRCRef",
+                argumentName = "__externalRCRefUnsafe",
                 type = SirNominalType(SirSwiftModule.unsafeMutableRawPointer).optional()
-            )
+            ),
+            SirParameter(
+                argumentName = "cache",
+                type = SirNominalType(SirSwiftModule.bool)
+            ),
+            SirParameter(
+                argumentName = "substitute",
+                type = SirNominalType(SirSwiftModule.bool)
+            ),
         )
     }.also { it.parent = this }
 

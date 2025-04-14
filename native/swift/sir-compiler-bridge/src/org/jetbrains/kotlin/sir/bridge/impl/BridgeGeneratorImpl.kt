@@ -151,7 +151,7 @@ internal class BridgeGeneratorImpl(private val typeNamer: SirTypeNamer) : Bridge
                 val errorParameter = initDescriptor.errorParameter
 
                 add("let ${obj.name} = ${request.allocationDescriptor(typeNamer).swiftCall(typeNamer)}")
-                add("super.init(__externalRCRef: ${obj.name})")
+                add("super.init(__externalRCRefUnsafe: ${obj.name}, cache: true, substitute: false)")
 
                 if (errorParameter != null) {
                     add("var ${errorParameter.name}: UnsafeMutableRawPointer? = nil")
@@ -634,7 +634,7 @@ private sealed class Bridge(
             override fun swiftToKotlin(typeNamer: SirTypeNamer, valueExpression: String) = "${valueExpression}.__externalRCRef()"
 
             override fun kotlinToSwift(typeNamer: SirTypeNamer, valueExpression: String) =
-                "${typeNamer.swiftFqName(swiftType)}(__externalRCRef: $valueExpression)"
+                "${typeNamer.swiftFqName(swiftType)}.__create(externalRCRef: $valueExpression)"
         }
     }
 
@@ -653,7 +653,7 @@ private sealed class Bridge(
             override fun swiftToKotlin(typeNamer: SirTypeNamer, valueExpression: String) = "${valueExpression}.__externalRCRef()"
 
             override fun kotlinToSwift(typeNamer: SirTypeNamer, valueExpression: String) =
-                "${typeNamer.swiftFqName(SirNominalType(KotlinRuntimeModule.kotlinBase))}(__asExistentialWrappingExternalRCRef: $valueExpression) as! ${typeNamer.swiftFqName(swiftType)}"
+                "${typeNamer.swiftFqName(SirNominalType(KotlinRuntimeModule.kotlinBase))}.__createExistential(externalRCRef: $valueExpression) as! ${typeNamer.swiftFqName(swiftType)}"
         }
     }
 
@@ -963,7 +963,7 @@ private sealed class Bridge(
                 }
 
                 override fun kotlinToSwift(typeNamer: SirTypeNamer, valueExpression: String): String {
-                    return "${typeNamer.swiftFqName(SirNominalType(KotlinRuntimeModule.kotlinBase))}(__externalRCRef: $valueExpression)"
+                    return "${typeNamer.swiftFqName(SirNominalType(KotlinRuntimeModule.kotlinBase))}.__create(externalRCRef: $valueExpression)"
                 }
 
                 override fun renderNil(): String {

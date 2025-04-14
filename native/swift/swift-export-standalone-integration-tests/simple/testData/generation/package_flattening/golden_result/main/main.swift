@@ -45,13 +45,15 @@ public extension ExportedKotlinPackages.org.kotlin.foo {
     public final class Clazz: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
         public override init() {
             let __kt = org_kotlin_foo_Clazz_init_allocate()
-            super.init(__externalRCRef: __kt)
+            super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
             org_kotlin_foo_Clazz_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)
         }
         package override init(
-            __externalRCRef: Swift.UnsafeMutableRawPointer?
+            __externalRCRefUnsafe: Swift.UnsafeMutableRawPointer?,
+            cache: Swift.Bool,
+            substitute: Swift.Bool
         ) {
-            super.init(__externalRCRef: __externalRCRef)
+            super.init(__externalRCRefUnsafe: __externalRCRefUnsafe, cache: cache, substitute: substitute)
         }
     }
     public static var constant: Swift.Int32 {
