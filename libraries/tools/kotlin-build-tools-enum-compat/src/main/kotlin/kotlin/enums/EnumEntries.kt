@@ -79,5 +79,6 @@ private class EnumEntriesList<T : Enum<T>>(private val entries: Array<T>) : Enum
         return EnumEntriesSerializationProxy(entries)
     }
 
-    private fun readObject(input: ObjectInputStream): Unit = throw InvalidObjectException("Deserialization is supported via proxy only")
+    @Suppress("unused")
+    private fun readObject(@Suppress("UNUSED_PARAMETER") input: ObjectInputStream): Unit = throw InvalidObjectException("Deserialization is supported via proxy only")
 }

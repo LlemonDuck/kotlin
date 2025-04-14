@@ -88,7 +88,8 @@ private class EnumEntriesList<T : Enum<T>>(private val entries: Array<T>) : Enum
         return EnumEntriesSerializationProxy(entries)
     }
 
-    private fun readObject(input: ReadObjectInput): Unit = throwReadObjectNotSupported()
+    @Suppress("unused")
+    private fun readObject(@Suppress("UNUSED_PARAMETER") input: ReadObjectInput): Unit = throwReadObjectNotSupported()
 }
 
 internal expect class EnumEntriesSerializationProxy<E : Enum<E>>(entries: Array<E>)
