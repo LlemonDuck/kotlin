@@ -51,6 +51,7 @@ internal abstract class KotlinNativeToolRunner @Inject constructor(
 
     companion object {
         private val dumpPerfArgument = CommonCompilerArguments::dumpPerf.argumentAnnotation.value
+        private val gson = Gson()
     }
     private val logger = Logging.getLogger(toolSpec.displayName.get())
     private val errorMessageCollector = GradleErrorMessageCollector(logger)
@@ -296,7 +297,7 @@ internal abstract class KotlinNativeToolRunner @Inject constructor(
     ) {
         if (!jsonFile.isFile()) return
         try {
-            val unitStats = Gson().fromJson(jsonFile.readText(), UnitStats::class.java)
+            val unitStats = gson.fromJson(jsonFile.readText(), UnitStats::class.java)
 
             unitStats.forEachPhaseMeasurement { type, time ->
                 if (time == null) return@forEachPhaseMeasurement
