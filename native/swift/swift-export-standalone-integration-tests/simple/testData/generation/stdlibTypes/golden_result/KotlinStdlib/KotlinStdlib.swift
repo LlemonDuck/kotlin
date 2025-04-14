@@ -126,7 +126,7 @@ public extension ExportedKotlinPackages.kotlin.text {
                 return kotlin_text_StringBuilder_length_get(self.__externalRCRef())
             }
         }
-        public override init() {
+        public init() {
             let __kt = kotlin_text_StringBuilder_init_allocate()
             super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
             kotlin_text_StringBuilder_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)

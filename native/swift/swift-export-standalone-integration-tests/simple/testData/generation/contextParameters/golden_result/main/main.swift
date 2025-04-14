@@ -3,7 +3,7 @@ import KotlinRuntime
 import KotlinRuntimeSupport
 
 public final class Context: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
-    public override init() {
+    public init() {
         let __kt = __root___Context_init_allocate()
         super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
         __root___Context_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)
@@ -22,7 +22,7 @@ public final class Foo: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBr
             return main.Foo.__create(externalRCRef: __root___Foo_get())
         }
     }
-    private override init() {
+    private init() {
         fatalError()
     }
     package override init(

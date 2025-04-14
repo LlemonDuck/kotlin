@@ -8,7 +8,7 @@ public final class MyObject: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._Kot
             return main.MyObject.__create(externalRCRef: __root___MyObject_get())
         }
     }
-    private override init() {
+    private init() {
         fatalError()
     }
     package override init(

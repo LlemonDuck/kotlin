@@ -38,7 +38,7 @@ public final class Outer: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._Kotlin
             return Outer_Inner_foo(self.__externalRCRef())
         }
     }
-    public override init() {
+    public init() {
         let __kt = __root___Outer_init_allocate()
         super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
         __root___Outer_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)

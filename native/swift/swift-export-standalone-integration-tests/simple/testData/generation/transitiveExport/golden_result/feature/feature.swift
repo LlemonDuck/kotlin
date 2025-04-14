@@ -5,7 +5,7 @@ import KotlinRuntimeSupport
 
 public extension ExportedKotlinPackages.oh.my.kotlin {
     public final class FeatureA: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
-        public override init() {
+        public init() {
             let __kt = oh_my_kotlin_FeatureA_init_allocate()
             super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
             oh_my_kotlin_FeatureA_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)
@@ -19,7 +19,7 @@ public extension ExportedKotlinPackages.oh.my.kotlin {
         }
     }
     public final class FeatureB: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
-        public override init() {
+        public init() {
             let __kt = oh_my_kotlin_FeatureB_init_allocate()
             super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
             oh_my_kotlin_FeatureB_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)

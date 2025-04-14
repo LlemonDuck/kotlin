@@ -10,7 +10,6 @@ public extension ExportedKotlinPackages.weird {
                 return weird_A_bar_get(self.__externalRCRef())
             }
         }
-        @_nonoverride
         public init() throws {
             let __kt = weird_A_init_allocate()
             super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)

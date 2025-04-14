@@ -5,7 +5,7 @@ import KotlinRuntimeSupport
 
 public extension ExportedKotlinPackages.org.kotlin {
     public final class Foo: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
-        public override init() {
+        public init() {
             let __kt = org_kotlin_Foo_init_allocate()
             super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
             org_kotlin_Foo_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)

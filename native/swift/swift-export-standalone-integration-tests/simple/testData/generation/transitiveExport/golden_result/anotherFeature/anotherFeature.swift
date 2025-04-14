@@ -9,7 +9,7 @@ public final class FeatureC: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._Kot
             return ExportedKotlinPackages.oh.my.state.State.__create(externalRCRef: FeatureC_state_get(self.__externalRCRef()))
         }
     }
-    public override init() {
+    public init() {
         let __kt = __root___FeatureC_init_allocate()
         super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
         __root___FeatureC_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)

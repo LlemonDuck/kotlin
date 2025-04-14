@@ -61,7 +61,7 @@ public final class ObjectWithFactory: KotlinRuntime.KotlinBase, KotlinRuntimeSup
             return main.ObjectWithFactory.__create(externalRCRef: __root___ObjectWithFactory_get())
         }
     }
-    private override init() {
+    private init() {
         fatalError()
     }
     package override init(
@@ -73,7 +73,7 @@ public final class ObjectWithFactory: KotlinRuntime.KotlinBase, KotlinRuntimeSup
     }
 }
 public final class UtcOffset: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
-    public override init() {
+    public init() {
         let __kt = __root___UtcOffset_init_allocate()
         super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
         __root___UtcOffset_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)
@@ -126,7 +126,7 @@ extension KotlinRuntimeSupport._KotlinExistential: main.InterfaceWithFactory whe
 }
 public extension ExportedKotlinPackages.test.factory {
     public final class ClassWithFactoryInAPackage: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
-        public override init() {
+        public init() {
             let __kt = test_factory_ClassWithFactoryInAPackage_init_allocate()
             super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
             test_factory_ClassWithFactoryInAPackage_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)
@@ -141,7 +141,7 @@ public extension ExportedKotlinPackages.test.factory {
     }
     public final class Outer: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
         public final class Nested: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
-            public override init() {
+            public init() {
                 let __kt = test_factory_Outer_Nested_init_allocate()
                 super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
                 test_factory_Outer_Nested_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)
@@ -154,7 +154,7 @@ public extension ExportedKotlinPackages.test.factory {
                 super.init(__externalRCRefUnsafe: __externalRCRefUnsafe, cache: cache, substitute: substitute)
             }
         }
-        public override init() {
+        public init() {
             let __kt = test_factory_Outer_init_allocate()
             super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
             test_factory_Outer_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)

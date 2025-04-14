@@ -4,7 +4,7 @@ import KotlinRuntime
 import KotlinRuntimeSupport
 
 open class ABSTRACT_CLASS: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
-    package override init() {
+    package init() {
         fatalError()
     }
     package override init(
@@ -16,7 +16,7 @@ open class ABSTRACT_CLASS: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._Kotli
     }
 }
 public final class CLASS_WITH_SAME_NAME: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
-    public override init() {
+    public init() {
         let __kt = __root___CLASS_WITH_SAME_NAME_init_allocate()
         super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
         __root___CLASS_WITH_SAME_NAME_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)
@@ -168,7 +168,7 @@ public final class DATA_CLASS_WITH_REF: KotlinRuntime.KotlinBase, KotlinRuntimeS
 }
 public final class ENUM: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged, Swift.CaseIterable {
     public final class INSIDE_ENUM: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
-        public override init() {
+        public init() {
             let __kt = ENUM_INSIDE_ENUM_init_allocate()
             super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
             ENUM_INSIDE_ENUM_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)
@@ -234,7 +234,7 @@ public final class Foo: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBr
                 return main.Foo.Companion.__create(externalRCRef: Foo_Companion_get())
             }
         }
-        private override init() {
+        private init() {
             fatalError()
         }
         package override init(
@@ -262,7 +262,7 @@ public final class Foo: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBr
                 return Foo_INSIDE_CLASS_my_variable_inner_set__TypesOfArguments__Swift_Int64__(self.__externalRCRef(), newValue)
             }
         }
-        public override init() {
+        public init() {
             let __kt = Foo_INSIDE_CLASS_init_allocate()
             super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
             Foo_INSIDE_CLASS_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)
@@ -323,7 +323,7 @@ public final class INHERITANCE_UNSUPPORTED_BASE: main.INHERITANCE_GENERIC {
 public final class OBJECT_NO_PACKAGE: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
     public final class Bar: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
         public final class CLASS_INSIDE_CLASS_INSIDE_OBJECT: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
-            public override init() {
+            public init() {
                 let __kt = OBJECT_NO_PACKAGE_Bar_CLASS_INSIDE_CLASS_INSIDE_OBJECT_init_allocate()
                 super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
                 OBJECT_NO_PACKAGE_Bar_CLASS_INSIDE_CLASS_INSIDE_OBJECT_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)
@@ -342,7 +342,7 @@ public final class OBJECT_NO_PACKAGE: KotlinRuntime.KotlinBase, KotlinRuntimeSup
                     return main.OBJECT_NO_PACKAGE.Bar.NamedCompanion.__create(externalRCRef: OBJECT_NO_PACKAGE_Bar_NamedCompanion_get())
                 }
             }
-            private override init() {
+            private init() {
                 fatalError()
             }
             package override init(
@@ -380,7 +380,7 @@ public final class OBJECT_NO_PACKAGE: KotlinRuntime.KotlinBase, KotlinRuntimeSup
         }
     }
     public final class Foo: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
-        public override init() {
+        public init() {
             let __kt = OBJECT_NO_PACKAGE_Foo_init_allocate()
             super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
             OBJECT_NO_PACKAGE_Foo_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)
@@ -399,7 +399,7 @@ public final class OBJECT_NO_PACKAGE: KotlinRuntime.KotlinBase, KotlinRuntimeSup
                 return main.OBJECT_NO_PACKAGE.OBJECT_INSIDE_OBJECT.__create(externalRCRef: OBJECT_NO_PACKAGE_OBJECT_INSIDE_OBJECT_get())
             }
         }
-        private override init() {
+        private init() {
             fatalError()
         }
         package override init(
@@ -428,7 +428,7 @@ public final class OBJECT_NO_PACKAGE: KotlinRuntime.KotlinBase, KotlinRuntimeSup
             return OBJECT_NO_PACKAGE_variable_set__TypesOfArguments__Swift_Int32__(self.__externalRCRef(), newValue)
         }
     }
-    private override init() {
+    private init() {
         fatalError()
     }
     package override init(
@@ -476,7 +476,7 @@ open class SEALED: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged
             super.init(__externalRCRefUnsafe: __externalRCRefUnsafe, cache: cache, substitute: substitute)
         }
     }
-    package override init() {
+    package init() {
         fatalError()
     }
     package override init(
@@ -507,7 +507,7 @@ public extension ExportedKotlinPackages.namespace.deeper {
                 return namespace_deeper_DATA_OBJECT_WITH_PACKAGE_variable_set__TypesOfArguments__Swift_Int32__(self.__externalRCRef(), newValue)
             }
         }
-        private override init() {
+        private init() {
             fatalError()
         }
         package override init(
@@ -543,7 +543,7 @@ public extension ExportedKotlinPackages.namespace.deeper {
                         return namespace_deeper_Foo_INSIDE_CLASS_DEEPER_INSIDE_CLASS_my_variable_set__TypesOfArguments__Swift_Int64__(self.__externalRCRef(), newValue)
                     }
                 }
-                public override init() {
+                public init() {
                     let __kt = namespace_deeper_Foo_INSIDE_CLASS_DEEPER_INSIDE_CLASS_init_allocate()
                     super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
                     namespace_deeper_Foo_INSIDE_CLASS_DEEPER_INSIDE_CLASS_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)
@@ -572,7 +572,7 @@ public extension ExportedKotlinPackages.namespace.deeper {
                     return namespace_deeper_Foo_INSIDE_CLASS_my_variable_set__TypesOfArguments__Swift_Int64__(self.__externalRCRef(), newValue)
                 }
             }
-            public override init() {
+            public init() {
                 let __kt = namespace_deeper_Foo_INSIDE_CLASS_init_allocate()
                 super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
                 namespace_deeper_Foo_INSIDE_CLASS_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)
@@ -601,7 +601,7 @@ public extension ExportedKotlinPackages.namespace.deeper {
                 return namespace_deeper_Foo_my_variable_set__TypesOfArguments__Swift_Int64__(self.__externalRCRef(), newValue)
             }
         }
-        public override init() {
+        public init() {
             let __kt = namespace_deeper_Foo_init_allocate()
             super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
             namespace_deeper_Foo_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)
@@ -618,7 +618,7 @@ public extension ExportedKotlinPackages.namespace.deeper {
         }
     }
     public final class NAMESPACED_CLASS: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
-        public override init() {
+        public init() {
             let __kt = namespace_deeper_NAMESPACED_CLASS_init_allocate()
             super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
             namespace_deeper_NAMESPACED_CLASS_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)
@@ -639,7 +639,7 @@ public extension ExportedKotlinPackages.namespace.deeper {
                         return ExportedKotlinPackages.namespace.deeper.OBJECT_WITH_PACKAGE.Bar.OBJECT_INSIDE_CLASS.__create(externalRCRef: namespace_deeper_OBJECT_WITH_PACKAGE_Bar_OBJECT_INSIDE_CLASS_get())
                     }
                 }
-                private override init() {
+                private init() {
                     fatalError()
                 }
                 package override init(
@@ -674,7 +674,7 @@ public extension ExportedKotlinPackages.namespace.deeper {
             }
         }
         public final class Foo: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
-            public override init() {
+            public init() {
                 let __kt = namespace_deeper_OBJECT_WITH_PACKAGE_Foo_init_allocate()
                 super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
                 namespace_deeper_OBJECT_WITH_PACKAGE_Foo_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)
@@ -693,7 +693,7 @@ public extension ExportedKotlinPackages.namespace.deeper {
                     return ExportedKotlinPackages.namespace.deeper.OBJECT_WITH_PACKAGE.OBJECT_INSIDE_OBJECT.__create(externalRCRef: namespace_deeper_OBJECT_WITH_PACKAGE_OBJECT_INSIDE_OBJECT_get())
                 }
             }
-            private override init() {
+            private init() {
                 fatalError()
             }
             package override init(
@@ -722,7 +722,7 @@ public extension ExportedKotlinPackages.namespace.deeper {
                 return namespace_deeper_OBJECT_WITH_PACKAGE_variable_set__TypesOfArguments__Swift_Int32__(self.__externalRCRef(), newValue)
             }
         }
-        private override init() {
+        private init() {
             fatalError()
         }
         package override init(
@@ -740,7 +740,7 @@ public extension ExportedKotlinPackages.namespace.deeper {
 public extension ExportedKotlinPackages.namespace {
     public final class Foo: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
         public final class INSIDE_CLASS: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
-            public override init() {
+            public init() {
                 let __kt = namespace_Foo_INSIDE_CLASS_init_allocate()
                 super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
                 namespace_Foo_INSIDE_CLASS_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)
@@ -766,7 +766,7 @@ public extension ExportedKotlinPackages.namespace {
                 return namespace_Foo_my_variable_set__TypesOfArguments__Swift_Int64__(self.__externalRCRef(), newValue)
             }
         }
-        public override init() {
+        public init() {
             let __kt = namespace_Foo_init_allocate()
             super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
             namespace_Foo_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)
@@ -783,7 +783,7 @@ public extension ExportedKotlinPackages.namespace {
         }
     }
     public final class NAMESPACED_CLASS: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
-        public override init() {
+        public init() {
             let __kt = namespace_NAMESPACED_CLASS_init_allocate()
             super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
             namespace_NAMESPACED_CLASS_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)
@@ -799,7 +799,7 @@ public extension ExportedKotlinPackages.namespace {
 }
 public extension ExportedKotlinPackages.why_we_need_module_names {
     public final class CLASS_WITH_SAME_NAME: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
-        public override init() {
+        public init() {
             let __kt = why_we_need_module_names_CLASS_WITH_SAME_NAME_init_allocate()
             super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
             why_we_need_module_names_CLASS_WITH_SAME_NAME_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)

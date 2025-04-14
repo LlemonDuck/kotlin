@@ -219,11 +219,6 @@ using RegularRef = kotlin::mm::ObjCBackRef;
     }
 }
 
-- (instancetype)init {
-    RuntimeAssert(false, "Should never be called?");
-    return [super init];
-}
-
 - (instancetype)initWithExternalRCRefUnsafe:(void *)ref cache:(BOOL)shouldCache substitute:(BOOL)shouldSubstitute {
     RuntimeAssert(kotlin::compiler::swiftExport(), "Must be used in Swift Export only");
     kotlin::AssertThreadState(kotlin::ThreadState::kNative);

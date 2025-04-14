@@ -25,7 +25,7 @@ struct ObjHeader;
 + (instancetype)createWithExternalRCRef:(void *)ref NS_SWIFT_NAME(__create(externalRCRef:));
 + (KotlinBase *)createExistentialWrappingExternalRCRef:(void *)ref NS_SWIFT_NAME(__createExistential(externalRCRef:));
 
-- (instancetype)init NS_DESIGNATED_INITIALIZER;
+- (instancetype)init NS_UNAVAILABLE;
 
 - (instancetype)initWithExternalRCRefUnsafe:(void *)ref cache:(BOOL)shouldCache substitute:(BOOL)shouldSubstitute NS_DESIGNATED_INITIALIZER NS_REFINED_FOR_SWIFT;
 

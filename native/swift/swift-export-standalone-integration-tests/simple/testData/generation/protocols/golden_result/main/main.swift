@@ -79,7 +79,7 @@ public final class Bar: KotlinRuntime.KotlinBase, main.Barable, main._Barable, m
             return main.Bar.__create(externalRCRef: Bar_baz_get(self.__externalRCRef()))
         }
     }
-    public override init() {
+    public init() {
         let __kt = __root___Bar_init_allocate()
         super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
         __root___Bar_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)
@@ -103,7 +103,7 @@ public final class Foo: KotlinRuntime.KotlinBase, main.Foeble, main._Foeble, Kot
             return KotlinRuntime.KotlinBase.__createExistential(externalRCRef: Foo_baz_get(self.__externalRCRef())) as! any main.Foeble
         }
     }
-    public override init() {
+    public init() {
         let __kt = __root___Foo_init_allocate()
         super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
         __root___Foo_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)
@@ -127,7 +127,7 @@ public final class MyObject: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._Kot
             return main.MyObject.__create(externalRCRef: __root___MyObject_get())
         }
     }
-    private override init() {
+    private init() {
         fatalError()
     }
     package override init(
@@ -144,7 +144,7 @@ public final class SomeBazzable: KotlinRuntime.KotlinBase, main.SealedBazzable, 
             return main.SomeBazzable.__create(externalRCRef: __root___SomeBazzable_get())
         }
     }
-    private override init() {
+    private init() {
         fatalError()
     }
     package override init(
@@ -156,7 +156,7 @@ public final class SomeBazzable: KotlinRuntime.KotlinBase, main.SealedBazzable, 
     }
 }
 open class _ContainerProtocol_NestedClass: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
-    public override init() {
+    public init() {
         let __kt = ContainerProtocol_NestedClass_init_allocate()
         super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
         ContainerProtocol_NestedClass_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)
@@ -170,7 +170,7 @@ open class _ContainerProtocol_NestedClass: KotlinRuntime.KotlinBase, KotlinRunti
     }
 }
 open class _ExportedKotlinPackages_packagewithprotocols_ContainerProtocol_NestedClass: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
-    public override init() {
+    public init() {
         let __kt = packagewithprotocols_ContainerProtocol_NestedClass_init_allocate()
         super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
         packagewithprotocols_ContainerProtocol_NestedClass_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)
@@ -185,7 +185,7 @@ open class _ExportedKotlinPackages_packagewithprotocols_ContainerProtocol_Nested
 }
 public final class _ExportedKotlinPackages_packagewithprotocols_SiblingProtocol_NestedClass: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
     public final class NestedClass: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
-        public override init() {
+        public init() {
             let __kt = packagewithprotocols_SiblingProtocol_NestedClass_NestedClass_init_allocate()
             super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
             packagewithprotocols_SiblingProtocol_NestedClass_NestedClass_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)
@@ -198,7 +198,7 @@ public final class _ExportedKotlinPackages_packagewithprotocols_SiblingProtocol_
             super.init(__externalRCRefUnsafe: __externalRCRefUnsafe, cache: cache, substitute: substitute)
         }
     }
-    public override init() {
+    public init() {
         let __kt = packagewithprotocols_SiblingProtocol_NestedClass_init_allocate()
         super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
         packagewithprotocols_SiblingProtocol_NestedClass_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)
@@ -217,7 +217,7 @@ public final class _SealedFoeble_SomeBarable: KotlinRuntime.KotlinBase, main._Se
             return main._SealedFoeble_SomeBarable.__create(externalRCRef: SealedFoeble_SomeBarable_get())
         }
     }
-    private override init() {
+    private init() {
         fatalError()
     }
     package override init(
@@ -234,7 +234,7 @@ public final class _SealedFoeble_SomeFoeble: KotlinRuntime.KotlinBase, main.Seal
             return main._SealedFoeble_SomeFoeble.__create(externalRCRef: SealedFoeble_SomeFoeble_get())
         }
     }
-    private override init() {
+    private init() {
         fatalError()
     }
     package override init(
@@ -247,7 +247,7 @@ public final class _SealedFoeble_SomeFoeble: KotlinRuntime.KotlinBase, main.Seal
 }
 public final class _SiblingProtocol_NestedClass: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
     public final class NestedClass: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
-        public override init() {
+        public init() {
             let __kt = SiblingProtocol_NestedClass_NestedClass_init_allocate()
             super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
             SiblingProtocol_NestedClass_NestedClass_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)
@@ -260,7 +260,7 @@ public final class _SiblingProtocol_NestedClass: KotlinRuntime.KotlinBase, Kotli
             super.init(__externalRCRefUnsafe: __externalRCRefUnsafe, cache: cache, substitute: substitute)
         }
     }
-    public override init() {
+    public init() {
         let __kt = SiblingProtocol_NestedClass_init_allocate()
         super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
         SiblingProtocol_NestedClass_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)
@@ -274,7 +274,7 @@ public final class _SiblingProtocol_NestedClass: KotlinRuntime.KotlinBase, Kotli
     }
 }
 open class __ContainerProtocol_NestedProtocol_NestedClass: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
-    public override init() {
+    public init() {
         let __kt = ContainerProtocol_NestedProtocol_NestedClass_init_allocate()
         super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
         ContainerProtocol_NestedProtocol_NestedClass_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)
@@ -288,7 +288,7 @@ open class __ContainerProtocol_NestedProtocol_NestedClass: KotlinRuntime.KotlinB
     }
 }
 open class __ExportedKotlinPackages_packagewithprotocols_ContainerProtocol_NestedProtocol_NestedClass: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
-    public override init() {
+    public init() {
         let __kt = packagewithprotocols_ContainerProtocol_NestedProtocol_NestedClass_init_allocate()
         super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
         packagewithprotocols_ContainerProtocol_NestedProtocol_NestedClass_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)
@@ -503,7 +503,7 @@ public extension ExportedKotlinPackages.packagewithprotocols {
                 return ExportedKotlinPackages.packagewithprotocols.OBJECT_WITH_INTERFACE_INHERITANCE.__create(externalRCRef: packagewithprotocols_OBJECT_WITH_INTERFACE_INHERITANCE_get())
             }
         }
-        private override init() {
+        private init() {
             fatalError()
         }
         package override init(
@@ -687,7 +687,7 @@ public extension ExportedKotlinPackages.repeating_conformances {
         }
     }
     open class Parent1: KotlinRuntime.KotlinBase, ExportedKotlinPackages.repeating_conformances.Foeble, ExportedKotlinPackages.repeating_conformances._Foeble, KotlinRuntimeSupport._KotlinBridged {
-        public override init() {
+        public init() {
             let __kt = repeating_conformances_Parent1_init_allocate()
             super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
             repeating_conformances_Parent1_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)
@@ -701,7 +701,7 @@ public extension ExportedKotlinPackages.repeating_conformances {
         }
     }
     open class Parent2: KotlinRuntime.KotlinBase, ExportedKotlinPackages.repeating_conformances.Foeble, ExportedKotlinPackages.repeating_conformances._Foeble, KotlinRuntimeSupport._KotlinBridged {
-        public override init() {
+        public init() {
             let __kt = repeating_conformances_Parent2_init_allocate()
             super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
             repeating_conformances_Parent2_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)
@@ -715,7 +715,7 @@ public extension ExportedKotlinPackages.repeating_conformances {
         }
     }
     open class Parent3: KotlinRuntime.KotlinBase, ExportedKotlinPackages.repeating_conformances.Barable, ExportedKotlinPackages.repeating_conformances._Barable, KotlinRuntimeSupport._KotlinBridged {
-        public override init() {
+        public init() {
             let __kt = repeating_conformances_Parent3_init_allocate()
             super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
             repeating_conformances_Parent3_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)
@@ -729,7 +729,7 @@ public extension ExportedKotlinPackages.repeating_conformances {
         }
     }
     open class Parent4: KotlinRuntime.KotlinBase, ExportedKotlinPackages.repeating_conformances.Foeble, ExportedKotlinPackages.repeating_conformances._Foeble, KotlinRuntimeSupport._KotlinBridged {
-        public override init() {
+        public init() {
             let __kt = repeating_conformances_Parent4_init_allocate()
             super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
             repeating_conformances_Parent4_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)
@@ -743,7 +743,7 @@ public extension ExportedKotlinPackages.repeating_conformances {
         }
     }
     open class Parent5: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
-        public override init() {
+        public init() {
             let __kt = repeating_conformances_Parent5_init_allocate()
             super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
             repeating_conformances_Parent5_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)

@@ -44,7 +44,7 @@ public final class _ExportedKotlinPackages_kotlinx_serialization_encoding_Compos
     ) {
         super.init(__externalRCRefUnsafe: __externalRCRefUnsafe, cache: cache, substitute: substitute)
     }
-    private override init() {
+    private init() {
         fatalError()
     }
 }
@@ -552,7 +552,7 @@ public extension ExportedKotlinPackages.kotlinx.serialization.modules {
         ) -> Swift.Never {
             fatalError()
         }
-        package override init() {
+        package init() {
             fatalError()
         }
         package override init(
@@ -960,7 +960,7 @@ public extension ExportedKotlinPackages.kotlinx.serialization.descriptors {
         open func toString() -> Swift.String {
             return kotlinx_serialization_descriptors_SerialKind_toString(self.__externalRCRef())
         }
-        package override init() {
+        package init() {
             fatalError()
         }
         package override init(
@@ -1690,7 +1690,7 @@ public extension ExportedKotlinPackages.kotlinx.serialization.encoding {
         ) -> Swift.Void {
             return kotlinx_serialization_encoding_AbstractDecoder_endStructure__TypesOfArguments__anyU20ExportedKotlinPackages_kotlinx_serialization_descriptors_SerialDescriptor__(self.__externalRCRef(), descriptor.__externalRCRef())
         }
-        package override init() {
+        package init() {
             fatalError()
         }
         package override init(
@@ -1867,7 +1867,7 @@ public extension ExportedKotlinPackages.kotlinx.serialization.encoding {
         ) -> Swift.Void {
             return kotlinx_serialization_encoding_AbstractEncoder_endStructure__TypesOfArguments__anyU20ExportedKotlinPackages_kotlinx_serialization_descriptors_SerialDescriptor__(self.__externalRCRef(), descriptor.__externalRCRef())
         }
-        package override init() {
+        package init() {
             fatalError()
         }
         package override init(

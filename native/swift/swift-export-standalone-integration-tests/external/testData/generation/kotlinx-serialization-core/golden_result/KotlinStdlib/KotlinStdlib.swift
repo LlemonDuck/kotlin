@@ -210,7 +210,7 @@ See https://youtrack.jetbrains.com/issue/KT-46465 for details about the migratio
         open func toByte() -> Swift.Int8 {
             return kotlin_Number_toByte(self.__externalRCRef())
         }
-        package override init() {
+        package init() {
             fatalError()
         }
         package override init(
@@ -277,7 +277,7 @@ See https://youtrack.jetbrains.com/issue/KT-46465 for details about the migratio
             super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
             kotlin_Throwable_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer_Swift_Optional_ExportedKotlinPackages_kotlin_Throwable___(__kt, cause.map { it in it.__externalRCRef() } ?? nil)
         }
-        public override init() {
+        public init() {
             let __kt = kotlin_Throwable_init_allocate()
             super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
             kotlin_Throwable_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)

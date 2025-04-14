@@ -9,7 +9,7 @@ public protocol INTERFACE: KotlinRuntime.KotlinBase {
 protocol _INTERFACE {
 }
 open class ABSTRACT_CLASS: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
-    package override init() {
+    package init() {
         fatalError()
     }
     package override init(
@@ -22,7 +22,7 @@ open class ABSTRACT_CLASS: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._Kotli
 }
 public final class Class_without_package: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
     public final class INNER_CLASS: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
-        public override init() {
+        public init() {
             let __kt = Class_without_package_INNER_CLASS_init_allocate()
             super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
             Class_without_package_INNER_CLASS_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)
@@ -41,7 +41,7 @@ public final class Class_without_package: KotlinRuntime.KotlinBase, KotlinRuntim
                 return main.Class_without_package.INNER_OBJECT.__create(externalRCRef: Class_without_package_INNER_OBJECT_get())
             }
         }
-        private override init() {
+        private init() {
             fatalError()
         }
         package override init(
@@ -52,7 +52,7 @@ public final class Class_without_package: KotlinRuntime.KotlinBase, KotlinRuntim
             super.init(__externalRCRefUnsafe: __externalRCRefUnsafe, cache: cache, substitute: substitute)
         }
     }
-    public override init() {
+    public init() {
         let __kt = __root___Class_without_package_init_allocate()
         super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
         __root___Class_without_package_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)
@@ -99,7 +99,7 @@ public final class DATA_CLASS: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._K
 }
 public final class Demo: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
     public final class INNER_CLASS: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
-        public override init() {
+        public init() {
             let __kt = Demo_INNER_CLASS_init_allocate()
             super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
             Demo_INNER_CLASS_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)
@@ -118,7 +118,7 @@ public final class Demo: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinB
                 return main.Demo.INNER_OBJECT.__create(externalRCRef: Demo_INNER_OBJECT_get())
             }
         }
-        private override init() {
+        private init() {
             fatalError()
         }
         package override init(
@@ -224,7 +224,7 @@ public final class Demo: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinB
     }
 }
 open class OPEN_CLASS: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
-    public override init() {
+    public init() {
         let __kt = __root___OPEN_CLASS_init_allocate()
         super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
         __root___OPEN_CLASS_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)
@@ -239,7 +239,7 @@ open class OPEN_CLASS: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBri
 }
 public final class Object_without_package: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
     public final class INNER_CLASS: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
-        public override init() {
+        public init() {
             let __kt = Object_without_package_INNER_CLASS_init_allocate()
             super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
             Object_without_package_INNER_CLASS_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)
@@ -258,7 +258,7 @@ public final class Object_without_package: KotlinRuntime.KotlinBase, KotlinRunti
                 return main.Object_without_package.INNER_OBJECT.__create(externalRCRef: Object_without_package_INNER_OBJECT_get())
             }
         }
-        private override init() {
+        private init() {
             fatalError()
         }
         package override init(
@@ -274,7 +274,7 @@ public final class Object_without_package: KotlinRuntime.KotlinBase, KotlinRunti
             return main.Object_without_package.__create(externalRCRef: __root___Object_without_package_get())
         }
     }
-    private override init() {
+    private init() {
         fatalError()
     }
     package override init(
@@ -488,7 +488,7 @@ extension KotlinRuntimeSupport._KotlinExistential: main.INTERFACE where Wrapped 
 public extension ExportedKotlinPackages.namespace.deeper {
     public final class Class_with_package: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
         public final class INNER_CLASS: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
-            public override init() {
+            public init() {
                 let __kt = namespace_deeper_Class_with_package_INNER_CLASS_init_allocate()
                 super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
                 namespace_deeper_Class_with_package_INNER_CLASS_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)
@@ -507,7 +507,7 @@ public extension ExportedKotlinPackages.namespace.deeper {
                     return ExportedKotlinPackages.namespace.deeper.Class_with_package.INNER_OBJECT.__create(externalRCRef: namespace_deeper_Class_with_package_INNER_OBJECT_get())
                 }
             }
-            private override init() {
+            private init() {
                 fatalError()
             }
             package override init(
@@ -518,7 +518,7 @@ public extension ExportedKotlinPackages.namespace.deeper {
                 super.init(__externalRCRefUnsafe: __externalRCRefUnsafe, cache: cache, substitute: substitute)
             }
         }
-        public override init() {
+        public init() {
             let __kt = namespace_deeper_Class_with_package_init_allocate()
             super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
             namespace_deeper_Class_with_package_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)
@@ -542,7 +542,7 @@ public extension ExportedKotlinPackages.namespace.deeper {
                 return ExportedKotlinPackages.namespace.deeper.DATA_OBJECT.__create(externalRCRef: namespace_deeper_DATA_OBJECT_get())
             }
         }
-        private override init() {
+        private init() {
             fatalError()
         }
         package override init(
@@ -561,7 +561,7 @@ public extension ExportedKotlinPackages.namespace.deeper {
     }
     public final class Object_with_package: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
         public final class INNER_CLASS: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinBridged {
-            public override init() {
+            public init() {
                 let __kt = namespace_deeper_Object_with_package_INNER_CLASS_init_allocate()
                 super.init(__externalRCRefUnsafe: __kt, cache: true, substitute: false)
                 namespace_deeper_Object_with_package_INNER_CLASS_init_initialize__TypesOfArguments__Swift_UnsafeMutableRawPointer__(__kt)
@@ -580,7 +580,7 @@ public extension ExportedKotlinPackages.namespace.deeper {
                     return ExportedKotlinPackages.namespace.deeper.Object_with_package.INNER_OBJECT.__create(externalRCRef: namespace_deeper_Object_with_package_INNER_OBJECT_get())
                 }
             }
-            private override init() {
+            private init() {
                 fatalError()
             }
             package override init(
@@ -596,7 +596,7 @@ public extension ExportedKotlinPackages.namespace.deeper {
                 return ExportedKotlinPackages.namespace.deeper.Object_with_package.__create(externalRCRef: namespace_deeper_Object_with_package_get())
             }
         }
-        private override init() {
+        private init() {
             fatalError()
         }
         package override init(

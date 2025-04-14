@@ -8,7 +8,7 @@ open class AbstractBase: KotlinRuntime.KotlinBase, KotlinRuntimeSupport._KotlinB
             return AbstractBase_abstractVal_get(self.__externalRCRef())
         }
     }
-    package override init() {
+    package init() {
         fatalError()
     }
     package init(
