@@ -20,7 +20,9 @@ class BuildErrorMessageCollector(val logger: KotlinLogger, private val kotlinPlu
     private val errors = ArrayList<String>()
 
     fun clear() {
-        errors.clear()
+        synchronized(errors) {
+            errors.clear()
+        }
     }
 
     fun addError(error: String) {
@@ -29,7 +31,9 @@ class BuildErrorMessageCollector(val logger: KotlinLogger, private val kotlinPlu
         }
     }
 
-    fun hasErrors() = errors.isNotEmpty()
+    fun hasErrors() = synchronized(errors) {
+        errors.isNotEmpty()
+    }
 
     fun flush(files: Set<File>) {
         if (!hasErrors()) {
@@ -43,7 +47,6 @@ class BuildErrorMessageCollector(val logger: KotlinLogger, private val kotlinPlu
                 for (error in errors) {
                     it.append("error message: $error\n\n")
                 }
-                it.flush()
             }
             logger.debug("${errors.count()} errors were stored into file ${file.absolutePath}")
         }

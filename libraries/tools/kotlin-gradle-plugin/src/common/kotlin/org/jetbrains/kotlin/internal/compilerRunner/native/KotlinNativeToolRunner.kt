@@ -296,11 +296,11 @@ internal abstract class KotlinNativeToolRunner @Inject constructor(
         try {
             val unitStats = Gson().fromJson(jsonFile.readText(), UnitStats::class.java)
 
-            unitStats?.analysisStats?.millis?.also { addTimeMetricMs(GradleBuildTime.CODE_ANALYSIS, it) }
-            unitStats?.initStats?.millis?.also { addTimeMetricMs(GradleBuildTime.COMPILER_INITIALIZATION, it) }
-            unitStats?.translationToIrStats?.millis?.also { addTimeMetricMs(GradleBuildTime.TRANSLATION_TO_IR, it) }
-            unitStats?.irLoweringStats?.millis?.also { addTimeMetricMs(GradleBuildTime.IR_LOWERING, it) }
-            unitStats?.backendStats?.millis?.also { addTimeMetricMs(GradleBuildTime.BACKEND, it) }
+            unitStats?.analysisStats?.nanos?.also { addTimeMetricNs(GradleBuildTime.CODE_ANALYSIS, it) }
+            unitStats?.initStats?.nanos?.also { addTimeMetricNs(GradleBuildTime.COMPILER_INITIALIZATION, it) }
+            unitStats?.translationToIrStats?.nanos?.also { addTimeMetricNs(GradleBuildTime.TRANSLATION_TO_IR, it) }
+            unitStats?.irLoweringStats?.nanos?.also { addTimeMetricNs(GradleBuildTime.IR_LOWERING, it) }
+            unitStats?.backendStats?.nanos?.also { addTimeMetricNs(GradleBuildTime.BACKEND, it) }
         } catch (e: Exception) {
             errorMessageCollector.report(FusMetricRetrievalException("Failed to parse metrics from file ${jsonFile.absolutePath}", e), location = null)
         }
