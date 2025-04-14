@@ -56,6 +56,9 @@ internal sealed class KaFirLocalOrErrorVariableSymbol(
         get() = withValidityAssertion { firSymbol.returnType(builder) }
 
     override val isLateInit: Boolean
+        // Note that for loop parameters having the `lateinit` keyword, the NON-PSI version returns `false`.
+        // This happens because `lateinit` is not propagated to the FIR status of the loop parameter symbol.
+        // See changes in KT-76578
         get() = withValidityAssertion { backingPsi?.hasModifier(KtTokens.LATEINIT_KEYWORD) ?: firSymbol.isLateInit }
 
     override fun createPointer(): KaSymbolPointer<KaLocalVariableSymbol> = withValidityAssertion {
