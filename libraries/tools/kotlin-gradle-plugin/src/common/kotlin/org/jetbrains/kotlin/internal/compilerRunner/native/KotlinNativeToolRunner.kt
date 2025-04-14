@@ -303,8 +303,8 @@ internal abstract class KotlinNativeToolRunner @Inject constructor(
                 if (time == null) return@forEachPhaseMeasurement
 
                 val gradleBuildTime = when (type) {
-                    PhaseType.Initialization -> GradleBuildTime.CODE_ANALYSIS
-                    PhaseType.Analysis -> GradleBuildTime.COMPILER_INITIALIZATION
+                    PhaseType.Initialization -> GradleBuildTime.COMPILER_INITIALIZATION
+                    PhaseType.Analysis -> GradleBuildTime.CODE_ANALYSIS
                     PhaseType.TranslationToIr -> GradleBuildTime.TRANSLATION_TO_IR
                     PhaseType.IrLowering -> GradleBuildTime.IR_LOWERING
                     PhaseType.Backend -> GradleBuildTime.BACKEND
