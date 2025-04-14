@@ -18,11 +18,13 @@ import org.jetbrains.kotlin.fir.declarations.getSealedClassInheritors
 import org.jetbrains.kotlin.fir.declarations.utils.isExpect
 import org.jetbrains.kotlin.fir.declarations.utils.modality
 import org.jetbrains.kotlin.fir.expressions.*
+import org.jetbrains.kotlin.fir.expressions.impl.FirElseIfTrueCondition
 import org.jetbrains.kotlin.fir.resolve.BodyResolveComponents
 import org.jetbrains.kotlin.fir.resolve.fullyExpandedType
 import org.jetbrains.kotlin.fir.resolve.providers.symbolProvider
 import org.jetbrains.kotlin.fir.resolve.toRegularClassSymbol
 import org.jetbrains.kotlin.fir.resolve.toSymbol
+import org.jetbrains.kotlin.fir.resolve.transformers.WhenOnSealedClassExhaustivenessChecker.ConditionChecker.processBranch
 import org.jetbrains.kotlin.fir.symbols.FirBasedSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirClassSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirRegularClassSymbol
@@ -398,6 +400,15 @@ private object WhenOnEnumExhaustivenessChecker : WhenExhaustivenessChecker() {
 
         val enumClass = (subjectType.toSymbol(session) as FirRegularClassSymbol).fir
         val notCheckedEntries = enumClass.declarations.mapNotNullTo(mutableSetOf()) { it as? FirEnumEntry }
+
+        whenExpression.branches.firstOrNull()?.let { firstBranch ->
+            val knownNonValues = ((firstBranch.condition as? FirEqualityOperatorCall)?.arguments?.firstOrNull() as? FirSmartCastExpression)
+                ?.lowerTypesFromSmartCast
+                ?.mapNotNull { (it as? DfaType.Symbol)?.symbol?.fir }
+                .orEmpty()
+            notCheckedEntries.removeAll(knownNonValues)
+        }
+
         whenExpression.accept(ConditionChecker, notCheckedEntries)
         notCheckedEntries.mapTo(destination) { WhenMissingCase.EnumCheckIsMissing(it.symbol.callableId) }
     }
@@ -406,12 +417,6 @@ private object WhenOnEnumExhaustivenessChecker : WhenExhaustivenessChecker() {
         override fun visitEqualityOperatorCall(equalityOperatorCall: FirEqualityOperatorCall, data: MutableSet<FirEnumEntry>) {
             if (!equalityOperatorCall.operation.let { it == FirOperation.EQ || it == FirOperation.IDENTITY }) return
             val argument = equalityOperatorCall.arguments[1]
-
-            val knownNonValues = (equalityOperatorCall.arguments.firstOrNull() as? FirSmartCastExpression)
-                ?.lowerTypesFromSmartCast
-                ?.mapNotNull { (it as? DfaType.Symbol)?.symbol?.fir }
-                .orEmpty()
-            data.removeAll(knownNonValues)
 
             @OptIn(UnsafeExpressionUtility::class)
             val symbol = argument.toResolvedCallableReferenceUnsafe()?.resolvedSymbol as? FirVariableSymbol<*> ?: return
@@ -434,6 +439,10 @@ private object WhenOnSealedClassExhaustivenessChecker : WhenExhaustivenessChecke
     ) {
         val allSubclasses = subjectType.toSymbol(session)?.collectAllSubclasses(session) ?: return
         val flags = Flags(allSubclasses, session = session)
+
+        whenExpression.branches.firstOrNull()?.let { firstBranch ->
+            inferVariantsFromSubjectSmartCast(firstBranch.condition, flags)
+        }
         whenExpression.accept(ConditionChecker, flags)
 
         (allSubclasses - flags.checkedSubclasses - flags.inferredSymbolEqualsChecks.keys).mapNotNullTo(destination) {
@@ -465,6 +474,21 @@ private object WhenOnSealedClassExhaustivenessChecker : WhenExhaustivenessChecke
         val session: FirSession
     )
 
+    private fun inferVariantsFromSubjectSmartCast(condition: FirExpression, data: Flags) {
+        val subject = (condition as? FirCall)?.arguments?.firstOrNull() as? FirSmartCastExpression ?: return
+
+        for (knownNonType in subject.lowerTypesFromSmartCast) {
+            when (knownNonType) {
+                is DfaType.Cone -> {
+                    val symbol = knownNonType.type.toSymbol(data.session) ?: continue
+                    processBranch(symbol, isNegated = false, data)
+                }
+                is DfaType.Symbol -> data.inferredSymbolEqualsChecks.getOrPut(knownNonType.symbol) { null }
+                else -> {}
+            }
+        }
+    }
+
     private object ConditionChecker : AbstractConditionChecker<Flags>() {
         override fun visitEqualityOperatorCall(equalityOperatorCall: FirEqualityOperatorCall, data: Flags) {
             val isNegated = when (equalityOperatorCall.operation) {
@@ -472,7 +496,6 @@ private object WhenOnSealedClassExhaustivenessChecker : WhenExhaustivenessChecke
                 FirOperation.NOT_EQ, FirOperation.NOT_IDENTITY -> true
                 else -> return
             }
-            inferVariantsFromSubjectSmartCast(equalityOperatorCall, data)
             val symbol = when (val argument = equalityOperatorCall.arguments[1].unwrapSmartcastExpression()) {
                 is FirResolvedQualifier -> {
                     val firClass = (argument.symbol as? FirRegularClassSymbol)?.fir
@@ -497,27 +520,11 @@ private object WhenOnSealedClassExhaustivenessChecker : WhenExhaustivenessChecke
                 FirOperation.NOT_IS -> true
                 else -> return
             }
-            inferVariantsFromSubjectSmartCast(typeOperatorCall, data)
             val symbol = typeOperatorCall.conversionTypeRef.coneType.fullyExpandedType(data.session).toSymbol(data.session) ?: return
             processBranch(symbol, isNegated, data)
         }
 
-        private fun inferVariantsFromSubjectSmartCast(typeOperatorCall: FirCall, data: Flags) {
-            val subject = typeOperatorCall.arguments.firstOrNull() as? FirSmartCastExpression ?: return
-
-            for (knownNonType in subject.lowerTypesFromSmartCast) {
-                when (knownNonType) {
-                    is DfaType.Cone -> {
-                        val symbol = knownNonType.type.toSymbol(data.session) ?: continue
-                        processBranch(symbol, isNegated = false, data)
-                    }
-                    is DfaType.Symbol -> data.inferredSymbolEqualsChecks.getOrPut(knownNonType.symbol) { null }
-                    else -> {}
-                }
-            }
-        }
-
-        private fun processBranch(symbolToCheck: FirBasedSymbol<*>, isNegated: Boolean, flags: Flags) {
+        fun processBranch(symbolToCheck: FirBasedSymbol<*>, isNegated: Boolean, flags: Flags) {
             val subclassesOfType = symbolToCheck.collectAllSubclasses(flags.session)
             if (subclassesOfType.none { it in flags.allSubclasses }) {
                 return
