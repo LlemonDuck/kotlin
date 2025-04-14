@@ -5,10 +5,10 @@
 
 package org.jetbrains.kotlin.konan.library.impl
 
-import org.jetbrains.kotlin.konan.library.BitcodeWriter
-import org.jetbrains.kotlin.konan.library.KonanLibraryWriter
 import org.jetbrains.kotlin.konan.file.File
+import org.jetbrains.kotlin.konan.library.BitcodeWriter
 import org.jetbrains.kotlin.konan.library.KonanLibraryLayout
+import org.jetbrains.kotlin.konan.library.KonanLibraryWriter
 import org.jetbrains.kotlin.konan.properties.Properties
 import org.jetbrains.kotlin.konan.target.KonanTarget
 import org.jetbrains.kotlin.library.*
@@ -32,7 +32,7 @@ class KonanLibraryWriterImpl(
     shortName: String? = null,
     val layout: KonanLibraryLayoutForWriter,
     base: BaseWriter = BaseWriterImpl(layout, moduleName, versions, builtInsPlatform, nativeTargets, nopack, shortName),
-    bitcode: BitcodeWriter = BitcodeWriterImpl(layout),
+    bitcode: BitcodeWriter = BitcodeWriterImpl(layout, versions.abiVersion),
     metadata: MetadataWriter = MetadataWriterImpl(layout),
     ir: IrWriter = IrWriterImpl(layout),
 

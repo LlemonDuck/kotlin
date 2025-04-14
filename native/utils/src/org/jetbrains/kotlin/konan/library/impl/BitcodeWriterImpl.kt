@@ -5,10 +5,11 @@
 
 package org.jetbrains.kotlin.konan.library.impl
 
-import org.jetbrains.kotlin.konan.library.BitcodeWriter
 import org.jetbrains.kotlin.konan.file.File
 import org.jetbrains.kotlin.konan.library.BitcodeKotlinLibraryLayout
+import org.jetbrains.kotlin.konan.library.BitcodeWriter
 import org.jetbrains.kotlin.konan.library.TargetedKotlinLibraryLayout
+import org.jetbrains.kotlin.library.KotlinAbiVersion
 
 open class TargetedWriterImpl(val targetLayout: TargetedKotlinLibraryLayout) {
     init {
@@ -23,13 +24,17 @@ open class TargetedWriterImpl(val targetLayout: TargetedKotlinLibraryLayout) {
 }
 
 class BitcodeWriterImpl(
-    libraryLayout: BitcodeKotlinLibraryLayout
+    libraryLayout: BitcodeKotlinLibraryLayout,
+    abiVersion: KotlinAbiVersion?,
 ) : BitcodeWriter, TargetedWriterImpl(libraryLayout) {
 
     val bitcodeLayout = libraryLayout
 
     init {
         bitcodeLayout.nativeDir.mkdirs()
+        if (abiVersion != null && abiVersion.major == 1 && abiVersion.minor == 201) {
+            bitcodeLayout.kotlinDir.mkdirs()
+        }
     }
 
     override fun addNativeBitcode(library: String) {
