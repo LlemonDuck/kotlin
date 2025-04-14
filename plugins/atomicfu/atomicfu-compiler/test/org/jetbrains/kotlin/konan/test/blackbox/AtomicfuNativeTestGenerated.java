@@ -212,6 +212,26 @@ public class AtomicfuNativeTestGenerated extends AbstractNativeCodegenBoxTest {
   }
 
   @Nested
+  @TestMetadata("plugins/atomicfu/atomicfu-compiler/testData/box/context_parameters")
+  @TestDataPath("$PROJECT_ROOT")
+  @Tag("atomicfu-native")
+  @EnforcedHostTarget()
+  @ClassicPipeline()
+  @UseExtTestCaseGroupProvider()
+  public class Context_parameters {
+    @Test
+    public void testAllFilesPresentInContext_parameters() {
+      KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("plugins/atomicfu/atomicfu-compiler/testData/box/context_parameters"), Pattern.compile("^(.+)\\.kt$"), null, TargetBackend.NATIVE, true);
+    }
+
+    @Test
+    @TestMetadata("ContextReceiverParametersTest.kt")
+    public void testContextReceiverParametersTest() {
+      runTest("plugins/atomicfu/atomicfu-compiler/testData/box/context_parameters/ContextReceiverParametersTest.kt");
+    }
+  }
+
+  @Nested
   @TestMetadata("plugins/atomicfu/atomicfu-compiler/testData/box/delegated")
   @TestDataPath("$PROJECT_ROOT")
   @Tag("atomicfu-native")
