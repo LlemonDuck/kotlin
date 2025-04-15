@@ -339,6 +339,12 @@ private object WhenOnBooleanExhaustivenessChecker : WhenExhaustivenessChecker() 
         var containsFalse = false
     }
 
+    private fun recordValue(value: Any?, data: Flags) = when (value) {
+        true -> data.containsTrue = true
+        false -> data.containsFalse = true
+        else -> {}
+    }
+
     override fun computeMissingCases(
         whenExpression: FirWhenExpression,
         subjectType: ConeKotlinType,
@@ -352,6 +358,10 @@ private object WhenOnBooleanExhaustivenessChecker : WhenExhaustivenessChecker() 
         }
 
         val flags = Flags()
+        (whenExpression.subjectVariable?.initializer as? FirSmartCastExpression)
+            ?.lowerTypesFromSmartCast
+            ?.mapNotNull { (it as? DfaType.BooleanLiteral)?.value }
+            ?.forEach { recordValue(it, flags) }
         whenExpression.accept(ConditionChecker, flags)
         if (!flags.containsTrue) {
             destination.add(WhenMissingCase.BooleanIsMissing.TrueIsMissing)
@@ -363,21 +373,10 @@ private object WhenOnBooleanExhaustivenessChecker : WhenExhaustivenessChecker() 
 
     private object ConditionChecker : AbstractConditionChecker<Flags>() {
         override fun visitEqualityOperatorCall(equalityOperatorCall: FirEqualityOperatorCall, data: Flags) {
-            fun recordValue(value: Any?) = when (value) {
-                true -> data.containsTrue = true
-                false -> data.containsFalse = true
-                else -> {}
-            }
-
             if (equalityOperatorCall.operation.let { it == FirOperation.EQ || it == FirOperation.IDENTITY }) {
-                (equalityOperatorCall.arguments.firstOrNull() as? FirSmartCastExpression)
-                    ?.lowerTypesFromSmartCast
-                    ?.mapNotNull { (it as? DfaType.BooleanLiteral)?.value }
-                    ?.forEach(::recordValue)
-
                 val argument = equalityOperatorCall.arguments[1]
                 if (argument is FirLiteralExpression) {
-                    recordValue(argument.value)
+                    recordValue(argument.value, data)
                 }
             }
         }
@@ -401,8 +400,8 @@ private object WhenOnEnumExhaustivenessChecker : WhenExhaustivenessChecker() {
         val enumClass = (subjectType.toSymbol(session) as FirRegularClassSymbol).fir
         val notCheckedEntries = enumClass.declarations.mapNotNullTo(mutableSetOf()) { it as? FirEnumEntry }
 
-        whenExpression.branches.firstOrNull()?.let { firstBranch ->
-            val knownNonValues = ((firstBranch.condition as? FirEqualityOperatorCall)?.arguments?.firstOrNull() as? FirSmartCastExpression)
+        whenExpression.subjectVariable?.initializer?.let { initializer ->
+            val knownNonValues = (initializer as? FirSmartCastExpression)
                 ?.lowerTypesFromSmartCast
                 ?.mapNotNull { (it as? DfaType.Symbol)?.symbol?.fir }
                 .orEmpty()
@@ -440,8 +439,8 @@ private object WhenOnSealedClassExhaustivenessChecker : WhenExhaustivenessChecke
         val allSubclasses = subjectType.toSymbol(session)?.collectAllSubclasses(session) ?: return
         val flags = Flags(allSubclasses, session = session)
 
-        whenExpression.branches.firstOrNull()?.let { firstBranch ->
-            inferVariantsFromSubjectSmartCast(firstBranch.condition, flags)
+        whenExpression.subjectVariable?.initializer?.let { initializer ->
+            inferVariantsFromSubjectSmartCast(initializer, flags)
         }
         whenExpression.accept(ConditionChecker, flags)
 
@@ -474,8 +473,8 @@ private object WhenOnSealedClassExhaustivenessChecker : WhenExhaustivenessChecke
         val session: FirSession
     )
 
-    private fun inferVariantsFromSubjectSmartCast(condition: FirExpression, data: Flags) {
-        val subject = (condition as? FirCall)?.arguments?.firstOrNull() as? FirSmartCastExpression ?: return
+    private fun inferVariantsFromSubjectSmartCast(subject: FirExpression, data: Flags) {
+        if (subject !is FirSmartCastExpression) return
 
         for (knownNonType in subject.lowerTypesFromSmartCast) {
             when (knownNonType) {
