@@ -31,7 +31,6 @@ import org.jetbrains.kotlin.fir.resolve.toRegularClassSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirPropertySymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirRegularClassSymbol
 import org.jetbrains.kotlin.fir.types.FirTypeRef
-import org.jetbrains.kotlin.fir.types.classId
 import org.jetbrains.kotlin.fir.types.coneType
 import org.jetbrains.kotlin.load.java.JvmAbi.JVM_FIELD_ANNOTATION_CLASS_ID
 import org.jetbrains.kotlin.name.JvmStandardClassIds.JVM_MULTIFILE_CLASS_ID
@@ -134,9 +133,7 @@ object FirJvmFieldApplicabilityChecker : FirPropertyChecker(MppCheckerKind.Commo
     }
 
     private fun isInsideJvmMultifileClassFile(context: CheckerContext): Boolean {
-        return context.containingFile?.annotations?.any {
-            it.annotationTypeRef.coneType.classId == JVM_MULTIFILE_CLASS_ID
-        } == true
+        return context.containingFileSymbol?.resolvedAnnotationClassIds?.any { it == JVM_MULTIFILE_CLASS_ID } == true
     }
 }
 
