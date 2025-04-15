@@ -7,11 +7,11 @@ package org.jetbrains.kotlin.fir.analysis.checkers.expression
 
 import org.jetbrains.kotlin.diagnostics.DiagnosticReporter
 import org.jetbrains.kotlin.diagnostics.reportOn
-import org.jetbrains.kotlin.fir.EqualsOverrideTrustworthiness
+import org.jetbrains.kotlin.fir.EqualsOverrideContract
 import org.jetbrains.kotlin.fir.analysis.checkers.MppCheckerKind
 import org.jetbrains.kotlin.fir.analysis.checkers.context.CheckerContext
 import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors
-import org.jetbrains.kotlin.fir.computeEqualsOverrideTrustworthiness
+import org.jetbrains.kotlin.fir.computeEqualsOverrideContract
 import org.jetbrains.kotlin.fir.expressions.ExhaustivenessStatus
 import org.jetbrains.kotlin.fir.expressions.FirWhenExpression
 import org.jetbrains.kotlin.fir.expressions.isImplicitWhenSubjectVariable
@@ -30,9 +30,9 @@ object FirWhenEqualsOverrideChecker : FirWhenExpressionChecker(mppKind = MppChec
         val subjectType = expression.subjectVariable?.takeIf { !it.isImplicitWhenSubjectVariable }?.returnTypeRef?.coneType
             ?: expression.subjectVariable?.initializer?.resolvedType
             ?: return
-        val trustworthiness = computeEqualsOverrideTrustworthiness(subjectType, context.session, context.scopeSession)
+        val contract = computeEqualsOverrideContract(subjectType, context.session, context.scopeSession)
 
-        if (trustworthiness < EqualsOverrideTrustworthiness.SAFE_FOR_EXHAUSTIVENESS) {
+        if (contract < EqualsOverrideContract.TRUSTED_FOR_EXHAUSTIVENESS) {
             for (symbolEqualsCheck in exhaustivenessStatus.symbolEqualsChecks) {
                 val symbol = symbolEqualsCheck.classId.toSymbol(context.session)
 

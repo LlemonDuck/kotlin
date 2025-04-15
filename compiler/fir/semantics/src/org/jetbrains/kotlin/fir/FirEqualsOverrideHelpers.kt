@@ -34,18 +34,28 @@ import org.jetbrains.kotlin.util.OperatorNameConventions
  * The entries are ordered from least trustworthy to most trustworthy.
  * `A` is more trustworthy than `B` iff we can rely on `A` in more cases compared to `B`.
  */
-enum class EqualsOverrideTrustworthiness {
-    UNSAFE,
-    SAFE_FOR_EXHAUSTIVENESS,
+enum class EqualsOverrideContract {
+    UNKNOWN,
+    TRUSTED_FOR_EXHAUSTIVENESS,
+
+    /**
+     * You can think of it as:
+     * ```
+     * contract {
+     *     returns(true) implies (other is SelfType)
+     *     returns(false) implies (other !is SelfLiteralType)
+     * }
+     * ```
+     */
     SAFE_FOR_SMART_CAST,
 }
 
-fun computeEqualsOverrideTrustworthiness(
+fun computeEqualsOverrideContract(
     type: ConeKotlinType,
     session: FirSession,
     scopeSession: ScopeSession,
-): EqualsOverrideTrustworthiness {
-    return computeEqualsOverrideTrustworthiness(
+): EqualsOverrideContract {
+    return computeEqualsOverrideContract(
         symbolsForType = collectSymbolsForType(type, session),
         session = session,
         scopeSession = scopeSession,
@@ -53,18 +63,18 @@ fun computeEqualsOverrideTrustworthiness(
     )
 }
 
-fun computeEqualsOverrideTrustworthiness(
+fun computeEqualsOverrideContract(
     symbolsForType: List<FirClassSymbol<*>>,
     session: FirSession,
     scopeSession: ScopeSession,
     visitedSymbols: MutableSet<FirClassifierSymbol<*>>,
-): EqualsOverrideTrustworthiness {
-    val subtypesTrustworthiness = symbolsForType
-        .maxOfOrNull { it.computeEqualsOverrideTrustworthiness(session, scopeSession, visitedSymbols) }
-        ?: EqualsOverrideTrustworthiness.SAFE_FOR_SMART_CAST
+): EqualsOverrideContract {
+    val subtypesContract = symbolsForType
+        .maxOfOrNull { it.computeEqualsOverrideContract(session, scopeSession, visitedSymbols) }
+        ?: EqualsOverrideContract.SAFE_FOR_SMART_CAST
 
-    if (subtypesTrustworthiness == EqualsOverrideTrustworthiness.UNSAFE) {
-        return EqualsOverrideTrustworthiness.UNSAFE
+    if (subtypesContract == EqualsOverrideContract.UNKNOWN) {
+        return EqualsOverrideContract.UNKNOWN
     }
 
     val superTypes = lookupSuperTypes(
@@ -77,45 +87,45 @@ fun computeEqualsOverrideTrustworthiness(
     )
     val superClassSymbols = superTypes.mapNotNull { it.fullyExpandedType(session).toRegularClassSymbol(session) }
 
-    val supertypesTrustworthiness = when (superClassSymbols.any { it.hasUntrustworthyEqualsOverride(session, scopeSession) }) {
-        true -> EqualsOverrideTrustworthiness.UNSAFE
-        false -> EqualsOverrideTrustworthiness.SAFE_FOR_SMART_CAST
+    val supertypesContract = when (superClassSymbols.any { it.hasEqualsOverrideContract(session, scopeSession) }) {
+        true -> EqualsOverrideContract.UNKNOWN
+        false -> EqualsOverrideContract.SAFE_FOR_SMART_CAST
     }
 
-    return minOf(subtypesTrustworthiness, supertypesTrustworthiness)
+    return minOf(subtypesContract, supertypesContract)
 }
 
-private fun FirClassSymbol<*>.computeEqualsOverrideTrustworthiness(
+private fun FirClassSymbol<*>.computeEqualsOverrideContract(
     session: FirSession,
     scopeSession: ScopeSession,
     visitedSymbols: MutableSet<FirClassifierSymbol<*>>,
-): EqualsOverrideTrustworthiness {
-    fun FirClassSymbol<*>.computeInheritorsTrustworthiness(): EqualsOverrideTrustworthiness {
-        if (this !is FirRegularClassSymbol) return EqualsOverrideTrustworthiness.UNSAFE
+): EqualsOverrideContract {
+    fun FirClassSymbol<*>.computeInheritorsContract(): EqualsOverrideContract {
+        if (this !is FirRegularClassSymbol) return EqualsOverrideContract.UNKNOWN
 
         val inheritors = fir.getSealedClassInheritors(session).map {
-            it.toSymbol(session) as? FirClassSymbol<*> ?: return EqualsOverrideTrustworthiness.UNSAFE
+            it.toSymbol(session) as? FirClassSymbol<*> ?: return EqualsOverrideContract.UNKNOWN
         }
 
         // Note that `sealed class` variants may have additional supertypes
-        return computeEqualsOverrideTrustworthiness(inheritors, session, scopeSession, visitedSymbols)
+        return computeEqualsOverrideContract(inheritors, session, scopeSession, visitedSymbols)
     }
 
     return when {
         isFinal -> when {
-            !hasUntrustworthyEqualsOverride(session, scopeSession) -> EqualsOverrideTrustworthiness.SAFE_FOR_SMART_CAST
-            isData || isInlineOrValue || classKind == ClassKind.OBJECT -> EqualsOverrideTrustworthiness.SAFE_FOR_EXHAUSTIVENESS
-            else -> EqualsOverrideTrustworthiness.UNSAFE
+            !hasEqualsOverrideContract(session, scopeSession) -> EqualsOverrideContract.SAFE_FOR_SMART_CAST
+            isData || isInlineOrValue || classKind == ClassKind.OBJECT -> EqualsOverrideContract.TRUSTED_FOR_EXHAUSTIVENESS
+            else -> EqualsOverrideContract.UNKNOWN
         }
-        isSealed && !hasUntrustworthyEqualsOverride(session, scopeSession) -> minOf(
-            EqualsOverrideTrustworthiness.SAFE_FOR_EXHAUSTIVENESS,
-            computeInheritorsTrustworthiness(),
+        isSealed && !hasEqualsOverrideContract(session, scopeSession) -> minOf(
+            EqualsOverrideContract.TRUSTED_FOR_EXHAUSTIVENESS,
+            computeInheritorsContract(),
         )
-        else -> EqualsOverrideTrustworthiness.UNSAFE
+        else -> EqualsOverrideContract.UNKNOWN
     }
 }
 
-private fun FirClassSymbol<*>.hasUntrustworthyEqualsOverride(session: FirSession, scopeSession: ScopeSession): Boolean {
+private fun FirClassSymbol<*>.hasEqualsOverrideContract(session: FirSession, scopeSession: ScopeSession): Boolean {
     if (resolvedStatus.isExpect) return true
     if (isSmartcastPrimitive(classId)) return false
     when (classId) {

@@ -602,9 +602,9 @@ abstract class FirDataFlowAnalyzer(
 
         if (leftOperandVariable !is RealVariable && rightOperandVariable !is RealVariable) return
 
-        val equalsTrustworthiness = when {
-            operation != FirOperation.EQ && operation != FirOperation.NOT_EQ -> EqualsOverrideTrustworthiness.SAFE_FOR_SMART_CAST
-            else -> computeEqualsOverrideTrustworthiness(leftOperandType, components.session, components.scopeSession)
+        val equalsContract = when {
+            operation != FirOperation.EQ && operation != FirOperation.NOT_EQ -> EqualsOverrideContract.SAFE_FOR_SMART_CAST
+            else -> computeEqualsOverrideContract(leftOperandType, components.session, components.scopeSession)
         }
 
         fun FirBasedSymbol<*>.isSingleton(): Boolean = this is FirEnumEntrySymbol || this is FirRegularClassSymbol && classKind.isObject
@@ -612,7 +612,7 @@ abstract class FirDataFlowAnalyzer(
         fun addEqualityImplications(variable: DataFlowVariable?, otherOperand: FirExpression) {
             if (variable !is RealVariable) return
 
-            if (equalsTrustworthiness == EqualsOverrideTrustworthiness.SAFE_FOR_SMART_CAST) {
+            if (equalsContract == EqualsOverrideContract.SAFE_FOR_SMART_CAST) {
                 flow.addImplication((expressionVariable eq isEq) implies (variable typeEq otherOperand.resolvedType))
             }
 
