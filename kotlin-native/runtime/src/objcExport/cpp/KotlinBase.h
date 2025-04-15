@@ -23,6 +23,7 @@ struct ObjHeader;
 // This situation happens if there's some unexported Swift class inheriting from an exported
 // open class: this is not currently supported.
 + (instancetype)createWithExternalRCRef:(void *)ref NS_SWIFT_NAME(__create(externalRCRef:));
+
 + (KotlinBase *)createExistentialWrappingExternalRCRef:(void *)ref NS_SWIFT_NAME(__createExistential(externalRCRef:));
 
 - (instancetype)init NS_UNAVAILABLE;

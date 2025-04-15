@@ -234,7 +234,7 @@ using RegularRef = kotlin::mm::ObjCBackRef;
     auto& regularRef = refHolder.emplace<RegularRef>(kotlin::mm::ExternalRCRefImpl::fromRaw(externalRCRef));
 
     id newSelf = nil;
-    {
+    if (shouldCache) {
         // TODO: Make it okay to get/replace associated objects w/o runnable state.
         kotlin::CalledFromNativeGuard guard;
         // `ref` holds a strong reference to obj, no need to place obj onto a stack.
@@ -247,7 +247,7 @@ using RegularRef = kotlin::mm::ObjCBackRef;
         return self;
     }
 
-    if (![[newSelf class] isSubclassOfClass:[self class]]) {
+    if (![[newSelf class] isSubclassOfClass:[self class]] || !shouldSubstitute) {
         return self;
     }
 
