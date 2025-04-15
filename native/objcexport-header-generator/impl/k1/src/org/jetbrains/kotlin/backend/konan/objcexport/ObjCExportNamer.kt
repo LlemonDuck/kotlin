@@ -803,7 +803,8 @@ class ObjCExportNamerImpl(
             prefix + this.replaceFirstChar(Char::uppercaseChar)
         } else {
             // TODO: handle clashes with NSObject methods etc.
-            this
+            // This works, because method are sorted by name first, so init_{n} gets registered before init_{n+1}
+            if (this == "init") "init_" else this
         }
 
     private inner class GenericTypeParameterNameMapping {
