@@ -32,7 +32,7 @@ class KonanLibraryWriterImpl(
     shortName: String? = null,
     val layout: KonanLibraryLayoutForWriter,
     base: BaseWriter = BaseWriterImpl(layout, moduleName, versions, builtInsPlatform, nativeTargets, nopack, shortName),
-    bitcode: BitcodeWriter = BitcodeWriterImpl(layout, versions.abiVersion),
+    bitcode: BitcodeWriter = BitcodeWriterImpl(layout),
     metadata: MetadataWriter = MetadataWriterImpl(layout),
     ir: IrWriter = IrWriterImpl(layout),
 
@@ -69,6 +69,10 @@ fun buildLibrary(
         shortName,
         layout
     )
+
+    if (versions.abiVersion?.major == 1 && versions.abiVersion?.minor == 201) {
+        File(layout.targetDir, "kotlin").mkdirs()
+    }
 
     library.addMetadata(metadata)
     if (ir != null) {

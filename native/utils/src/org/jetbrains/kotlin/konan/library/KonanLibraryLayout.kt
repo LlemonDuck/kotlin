@@ -39,8 +39,6 @@ interface TargetedKotlinLibraryLayout : KotlinLibraryLayout {
 interface BitcodeKotlinLibraryLayout : TargetedKotlinLibraryLayout, KotlinLibraryLayout {
     val nativeDir
         get() = File(targetDir, "native")
-    val kotlinDir
-        get() = File(targetDir, "kotlin")
 }
 
 interface KonanLibraryLayout : MetadataKotlinLibraryLayout, BitcodeKotlinLibraryLayout, IrKotlinLibraryLayout
