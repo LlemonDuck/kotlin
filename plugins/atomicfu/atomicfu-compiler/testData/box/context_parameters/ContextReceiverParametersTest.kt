@@ -1,4 +1,5 @@
 // LANGUAGE: +ContextParameters
+// TARGET_BACKEND: JVM_IR, JS_IR
 
 import kotlinx.atomicfu.*
 import kotlin.test.*
