@@ -7,7 +7,7 @@ package kotlin.coroutines
 
 import kotlin.coroutines.CoroutineContext.Element
 import kotlin.coroutines.CoroutineContext.Key
-import kotlin.internal.ReadObjectInput
+import kotlin.internal.ReadObjectParameterType
 import kotlin.internal.throwReadObjectNotSupported
 
 /**
@@ -187,7 +187,7 @@ internal class CombinedContext(
         return Serialized(elements as Array<CoroutineContext>)
     }
 
-    private fun readObject(input: ReadObjectInput): Unit = throwReadObjectNotSupported()
+    private fun readObject(input: ReadObjectParameterType): Unit = throwReadObjectNotSupported()
 
     private class Serialized(val elements: Array<CoroutineContext>) : Serializable {
         companion object {

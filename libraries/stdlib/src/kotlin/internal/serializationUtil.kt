@@ -16,4 +16,4 @@ internal expect inline fun throwReadObjectNotSupported(): Nothing
  *
  * It should be `ObjectInputStream` on JVM.
  */
-internal expect class ReadObjectInput
+internal expect class ReadObjectParameterType

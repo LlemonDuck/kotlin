@@ -7,7 +7,7 @@
 
 package kotlin.enums
 
-import kotlin.internal.ReadObjectInput
+import kotlin.internal.ReadObjectParameterType
 import kotlin.internal.throwReadObjectNotSupported
 
 /**
@@ -89,7 +89,7 @@ private class EnumEntriesList<T : Enum<T>>(private val entries: Array<T>) : Enum
     }
 
     @Suppress("unused")
-    private fun readObject(@Suppress("UNUSED_PARAMETER") input: ReadObjectInput): Unit = throwReadObjectNotSupported()
+    private fun readObject(@Suppress("UNUSED_PARAMETER") input: ReadObjectParameterType): Unit = throwReadObjectNotSupported()
 }
 
 internal expect class EnumEntriesSerializationProxy<E : Enum<E>>(entries: Array<E>)

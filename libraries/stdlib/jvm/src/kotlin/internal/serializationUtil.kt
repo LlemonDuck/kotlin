@@ -12,4 +12,4 @@ internal actual inline fun throwReadObjectNotSupported(): Nothing {
     throw InvalidObjectException("Deserialization is supported via proxy only")
 }
 
-internal actual typealias ReadObjectInput = java.io.ObjectInputStream
+internal actual typealias ReadObjectParameterType = java.io.ObjectInputStream

@@ -10,4 +10,4 @@ internal actual inline fun throwReadObjectNotSupported(): Nothing {
     throw UnsupportedOperationException("Deserialization is supported via proxy only")
 }
 
-internal actual typealias ReadObjectInput = Unit
+internal actual typealias ReadObjectParameterType = Unit

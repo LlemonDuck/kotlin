@@ -11,7 +11,7 @@ package kotlin.uuid
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 import kotlin.internal.InlineOnly
-import kotlin.internal.ReadObjectInput
+import kotlin.internal.ReadObjectParameterType
 import kotlin.internal.throwReadObjectNotSupported
 
 /**
@@ -272,7 +272,7 @@ public class Uuid private constructor(
 
     private fun writeReplace(): Any = serializedUuid(this)
 
-    private fun readObject(input: ReadObjectInput): Unit = throwReadObjectNotSupported()
+    private fun readObject(input: ReadObjectParameterType): Unit = throwReadObjectNotSupported()
 
     public companion object {
         /**
