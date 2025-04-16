@@ -271,7 +271,7 @@ object FirInlineDeclarationChecker : FirFunctionChecker(MppCheckerKind.Common) {
                 if (!qualifiedAccess.partOfCall(context)) {
                     reporter.reportOn(source, FirErrors.USAGE_IS_NOT_INLINABLE, targetSymbol, context)
                 }
-                if (context.containingDeclarations.any { it.symbol in inlinableParameters }) {
+                if (context.containingDeclarations.any { it in inlinableParameters }) {
                     reporter.reportOn(source, FirErrors.NOT_SUPPORTED_INLINE_PARAMETER_IN_INLINE_PARAMETER_DEFAULT_VALUE, targetSymbol as FirValueParameterSymbol, context)
                 }
             }
@@ -536,19 +536,19 @@ object FirInlineDeclarationChecker : FirFunctionChecker(MppCheckerKind.Common) {
 
     private fun isNonLocalReturnAllowed(context: CheckerContext, inlineFunction: FirFunction): Boolean {
         val declarations = context.containingDeclarations
-        val inlineFunctionIndex = declarations.indexOf(inlineFunction)
+        val inlineFunctionIndex = declarations.indexOf(inlineFunction.symbol)
         if (inlineFunctionIndex == -1) return true
 
         for (i in (inlineFunctionIndex + 1) until declarations.size) {
             val declaration = declarations[i]
 
             // Only consider containers which can change locality.
-            if (declaration !is FirFunction && declaration !is FirClass) continue
+            if (declaration !is FirFunctionSymbol && declaration !is FirClassSymbol) continue
 
             // Anonymous functions are allowed if they are an argument to an inline function call,
             // and the associated anonymous function parameter allows non-local returns. Everything
             // else changes locality, and must not be allowed.
-            val anonymousFunction = declaration as? FirAnonymousFunction ?: return false
+            val anonymousFunction = declaration as? FirAnonymousFunctionSymbol ?: return false
             val (call, parameter) = extractCallAndParameter(context, anonymousFunction) ?: return false
             val callable = call.toResolvedCallableSymbol() as? FirFunctionSymbol<*> ?: return false
             if (!callable.isInline && !callable.isArrayLambdaConstructor()) return false
@@ -560,13 +560,13 @@ object FirInlineDeclarationChecker : FirFunctionChecker(MppCheckerKind.Common) {
 
     private fun extractCallAndParameter(
         context: CheckerContext,
-        anonymousFunction: FirAnonymousFunction,
+        anonymousFunction: FirAnonymousFunctionSymbol,
     ): Pair<FirFunctionCall, FirValueParameter>? {
         for (call in context.callsOrAssignments) {
             if (call is FirFunctionCall) {
                 val mapping = call.resolvedArgumentMapping ?: continue
                 for ((argument, parameter) in mapping) {
-                    if ((argument.unwrapArgument() as? FirAnonymousFunctionExpression)?.anonymousFunction === anonymousFunction) {
+                    if ((argument.unwrapArgument() as? FirAnonymousFunctionExpression)?.anonymousFunction?.symbol === anonymousFunction) {
                         return call to parameter
                     }
                 }
