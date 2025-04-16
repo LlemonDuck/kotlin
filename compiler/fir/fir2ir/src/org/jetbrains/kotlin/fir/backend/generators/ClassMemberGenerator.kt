@@ -125,8 +125,8 @@ internal class ClassMemberGenerator(
                     val irClass = parent as IrClass
                     if (delegatedConstructor != null) {
                         val irDelegatingConstructorCall = conversionScope.forDelegatingConstructorCall(irFunction, irClass) {
-                            val source = if (firFunction.isPrimary) containingClass!! else delegatedConstructor
-                            source.convertWithOffsets { startOffset, endOffset ->
+                            val sourceFirElement = if (firFunction.isPrimary) containingClass!! else delegatedConstructor
+                            sourceFirElement.convertWithOffsets { startOffset, endOffset ->
                                 delegatedConstructor.toIrDelegatingConstructorCall(startOffset, endOffset)
                             }
                         }
@@ -162,8 +162,8 @@ internal class ClassMemberGenerator(
                     }
 
                     if (delegatedConstructor?.isThis == false) {
-                        val source = if (firFunction.isPrimary) containingClass!! else firFunction
-                        body.statements += source.convertWithOffsets { startOffset, endOffset ->
+                        val sourceFirElement = if (firFunction.isPrimary) containingClass!! else firFunction
+                        body.statements += sourceFirElement.convertWithOffsets { startOffset, endOffset ->
                             IrInstanceInitializerCallImpl(
                                 startOffset, endOffset, irClass.symbol, this@ClassMemberGenerator.builtins.unitType,
                             )
