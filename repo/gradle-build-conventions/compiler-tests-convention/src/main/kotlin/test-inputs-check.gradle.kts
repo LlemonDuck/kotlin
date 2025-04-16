@@ -9,6 +9,7 @@ if (!disableInputsCheck) {
     tasks.withType<Test>().names.forEach {
         val permissionsTask =
             tasks.register<Task>("permissions${it.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }}") {
+                mustRunAfter(tasks.named("processTestResources"))
                 val permissionsTemplateFile = rootProject.file("tests-permissions.template.policy")
                 inputs.file(permissionsTemplateFile).withPathSensitivity(PathSensitivity.RELATIVE)
                 val policyFileProvider: Provider<RegularFile> = layout.buildDirectory.file("permissions-for-$it.policy")
@@ -26,6 +27,10 @@ if (!disableInputsCheck) {
                 )
 
                 doFirst {
+                    if (!permissionsTemplateFile.exists()) {
+                        throw GradleException("Security policy template file not found at: ${permissionsTemplateFile.absolutePath}")
+                    }
+
                     fun parentsReadPermission(file: File): List<String> {
                         val parents = mutableListOf<String>()
                         var p: File? = file.parentFile
@@ -88,41 +93,28 @@ if (!disableInputsCheck) {
 
                     val temp_dir = calcCanonicalTempPath()
 
-                    val extDirs = System.getProperty("java.ext.dirs")?.split(":")?.flatMap {
-                        listOf(
-                            """permission java.io.FilePermission "$it", "read";""",
-                            """permission java.io.FilePermission "$it/-", "read";""",
-                        )
-                    } ?: emptyList()
-
                     val policyFile = policyFileProvider.get().asFile
                     policyFile.parentFile.mkdirs()
-                    policyFile.writeText(
-                        permissionsTemplateFile.readText()
-                            .replace(
+                    try {
+                        policyFile.writeText(
+                            permissionsTemplateFile.readText().replace(
                                 "{{temp_dir}}",
                                 (parentsReadPermission(File(temp_dir)) + """permission java.io.FilePermission "$temp_dir/-", "read,write,delete";""" + """permission java.io.FilePermission "$temp_dir", "read";""").joinToString(
                                     "\n    "
                                 )
-                            )
-                            .replace(
-                                "{{jdk}}",
-                                ((defineJDKEnvVariables + javaVersion.get()).map { version ->
-                                    val jdkHome =
-                                        service.launcherFor {
-                                            languageVersion.set(JavaLanguageVersion.of(version))
-                                        }.orNull?.executablePath?.asFile?.parentFile?.parentFile?.parentFile?.parentFile?.canonicalPath
-                                            ?: error("Can't find toolchain for $version")
-                                    """permission java.io.FilePermission "$jdkHome/-", "read,execute";"""
-                                } + extDirs
-                                        ).joinToString("\n    ")
-                            )
-                            .replace(
-                                "{{gradle_user_home}}",
-                                """$gradleUserHomeDir"""
-                            )
-                            .replace("{{inputs}}", inputPermissions.sorted().joinToString("\n    "))
-                    )
+                            ).replace("{{jdk}}", ((defineJDKEnvVariables + javaVersion.get()).map { version ->
+                                val jdkHome = service.launcherFor {
+                                    languageVersion.set(JavaLanguageVersion.of(version))
+                                }.orNull?.executablePath?.asFile?.parentFile?.parentFile?.parentFile?.parentFile?.canonicalPath
+                                    ?: error("Can't find toolchain for $version")
+                                """permission java.io.FilePermission "$jdkHome/-", "read,execute";"""
+                            }).joinToString("\n    ")).replace(
+                                "{{gradle_user_home}}", """$gradleUserHomeDir"""
+                            ).replace("{{inputs}}", inputPermissions.sorted().joinToString("\n    ")))
+                    } catch (e: IOException) {
+                        logger.error("Failed to generate security policy file", e)
+                        throw e
+                    }
                 }
             }
         tasks.named<Test>(it).configure {
@@ -132,9 +124,9 @@ if (!disableInputsCheck) {
                 val policyFile = policyFileProvider.get()
                 println("Security policy for test inputs generated to ${policyFile.absolutePath}")
                 jvmArgs(
-                    "-Djava.security.manager=java.lang.SecurityManager",
-                    "-Djava.security.debug=failure",
                     "-Djava.security.policy=${policyFile.absolutePath}",
+                    "-Djava.security.debug=failure",
+                    "-Djava.security.manager=java.lang.SecurityManager",
                 )
             }
         }
