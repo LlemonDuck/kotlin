@@ -5,6 +5,7 @@
 // LANGUAGE: +IrInlinerBeforeKlibSerialization
 // IGNORE_BACKEND_K2: NATIVE
 // ^^^ KT-76761: local classes got wrong names
+// Please delete this test after fix of KT-76761, since it would duplicate test `anonymousObjectInInlineFunction.kt` nearby
 
 package codegen.kclass.kclass0
 import kotlin.test.*
