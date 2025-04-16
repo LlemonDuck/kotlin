@@ -17,9 +17,9 @@ fun foo(v: Variants): String {
         return "B"
     }
 
-    return when (v) {
-        Variants.A -> "B"
-        Variants.D -> "D"
+    return when (<!UNSAFE_EXHAUSTIVENESS("Variants.B")!>v<!>) {
+        <!UNSAFE_EXHAUSTIVENESS("Variants.A")!>Variants.A<!> -> "B"
+        <!UNSAFE_EXHAUSTIVENESS("Variants.D")!>Variants.D<!> -> "D"
         Variants.C -> "C"
     }
 }

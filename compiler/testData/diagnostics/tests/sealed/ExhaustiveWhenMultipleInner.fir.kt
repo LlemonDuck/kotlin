@@ -14,10 +14,10 @@ sealed class Sealed() {
 }
 
 fun foo(s: Sealed) = when(s) {
-    Sealed.First -> 1
+    <!UNSAFE_EXHAUSTIVENESS!>Sealed.First<!> -> 1
     is Sealed.NonFirst -> 2
-    Sealed.NonFirst.Second -> 4
-    Sealed.NonFirst.NonSecond.Third -> 6
+    <!UNSAFE_EXHAUSTIVENESS!>Sealed.NonFirst.Second<!> -> 4
+    <!UNSAFE_EXHAUSTIVENESS!>Sealed.NonFirst.NonSecond.Third<!> -> 6
     is Sealed.NonFirst.NonSecond.NonThird -> 8
     is Sealed.NonFirst.NonSecond.NonThird.Fifth -> 10
     // no else required

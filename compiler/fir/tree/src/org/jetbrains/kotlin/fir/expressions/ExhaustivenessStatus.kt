@@ -15,7 +15,7 @@ sealed class ExhaustivenessStatus {
      * cases are properly covered.
      */
     data class ProperlyExhaustive(
-        val symbolEqualsChecks: List<WhenMissingCase.SymbolEqualsCheck> = emptyList(),
+        val symbolsNotCoveredByUnsafeEquals: List<WhenMissingCase.SymbolsNotCoveredByUnsafeEqualsAreMissing> = emptyList(),
     ) : ExhaustivenessStatus()
 
     /**

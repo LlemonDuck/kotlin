@@ -387,9 +387,9 @@ fun case_30(x: SealedClass?): Int {
 fun case_31(x: Any) {
     x as SealedClassWithObjects
     val y = when(x) {
-        SealedWithObjectsChild1 -> 1
-        SealedWithObjectsChild2 -> 2
-        SealedWithObjectsChild3 -> 3
+        <!UNSAFE_EXHAUSTIVENESS!>SealedWithObjectsChild1<!> -> 1
+        <!UNSAFE_EXHAUSTIVENESS!>SealedWithObjectsChild2<!> -> 2
+        <!UNSAFE_EXHAUSTIVENESS!>SealedWithObjectsChild3<!> -> 3
     }
 }
 
@@ -397,9 +397,9 @@ fun case_31(x: Any) {
 fun case_32(x: Any) {
     if (x is SealedClassWithObjects?) {
         val y = when(x) {
-            SealedWithObjectsChild1 -> 1
-            SealedWithObjectsChild2 -> 2
-            SealedWithObjectsChild3 -> 3
+            <!UNSAFE_EXHAUSTIVENESS!>SealedWithObjectsChild1<!> -> 1
+            <!UNSAFE_EXHAUSTIVENESS!>SealedWithObjectsChild2<!> -> 2
+            <!UNSAFE_EXHAUSTIVENESS!>SealedWithObjectsChild3<!> -> 3
             <!SENSELESS_NULL_IN_WHEN!>null<!> -> 5
         }
     }
@@ -409,9 +409,9 @@ fun case_32(x: Any) {
 fun case_33(x: Any?) {
     x as SealedClassWithObjects?
     val y = when(x) {
-        SealedWithObjectsChild1 -> 1
-        SealedWithObjectsChild2 -> 2
-        SealedWithObjectsChild3 -> 3
+        <!UNSAFE_EXHAUSTIVENESS!>SealedWithObjectsChild1<!> -> 1
+        <!UNSAFE_EXHAUSTIVENESS!>SealedWithObjectsChild2<!> -> 2
+        <!UNSAFE_EXHAUSTIVENESS!>SealedWithObjectsChild3<!> -> 3
         null -> 5
     }
 }
@@ -420,9 +420,9 @@ fun case_33(x: Any?) {
 fun case_34(x: SealedClassWithObjects?): Int {
     x!!
     return when(x) {
-        SealedWithObjectsChild1 -> 1
-        SealedWithObjectsChild2 -> 2
-        SealedWithObjectsChild3 -> 3
+        <!UNSAFE_EXHAUSTIVENESS!>SealedWithObjectsChild1<!> -> 1
+        <!UNSAFE_EXHAUSTIVENESS!>SealedWithObjectsChild2<!> -> 2
+        <!UNSAFE_EXHAUSTIVENESS!>SealedWithObjectsChild3<!> -> 3
     }
 }
 
@@ -430,9 +430,9 @@ fun case_34(x: SealedClassWithObjects?): Int {
 fun case_35(x: Any): Int {
     if (x is SealedClassWithObjects?) {
         return when(x) {
-            SealedWithObjectsChild1 -> 1
-            SealedWithObjectsChild2 -> 2
-            SealedWithObjectsChild3 -> 3
+            <!UNSAFE_EXHAUSTIVENESS!>SealedWithObjectsChild1<!> -> 1
+            <!UNSAFE_EXHAUSTIVENESS!>SealedWithObjectsChild2<!> -> 2
+            <!UNSAFE_EXHAUSTIVENESS!>SealedWithObjectsChild3<!> -> 3
             <!SENSELESS_NULL_IN_WHEN!>null<!> -> 5
         }
     }
@@ -443,9 +443,9 @@ fun case_35(x: Any): Int {
 fun case_36(x: Any?) {
     x as SealedClassWithObjects
     val y = when(x) {
-        SealedWithObjectsChild1 -> 1
-        SealedWithObjectsChild2 -> 2
-        SealedWithObjectsChild3 -> 3
+        <!UNSAFE_EXHAUSTIVENESS!>SealedWithObjectsChild1<!> -> 1
+        <!UNSAFE_EXHAUSTIVENESS!>SealedWithObjectsChild2<!> -> 2
+        <!UNSAFE_EXHAUSTIVENESS!>SealedWithObjectsChild3<!> -> 3
     }
 }
 
@@ -453,9 +453,9 @@ fun case_36(x: Any?) {
 fun case_37(x: SealedClassWithObjects?): Int {
     if (x !== null) {
         return when(x) {
-            SealedWithObjectsChild1 -> 1
-            SealedWithObjectsChild2 -> 2
-            SealedWithObjectsChild3 -> 3
+            <!UNSAFE_EXHAUSTIVENESS!>SealedWithObjectsChild1<!> -> 1
+            <!UNSAFE_EXHAUSTIVENESS!>SealedWithObjectsChild2<!> -> 2
+            <!UNSAFE_EXHAUSTIVENESS!>SealedWithObjectsChild3<!> -> 3
         }
     }
     return 0

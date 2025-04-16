@@ -9,8 +9,8 @@
 }
 
 abstract class E1 {
-    object A : E1()
-    object B : E1()
+    data object A : E1()
+    data object B : E1()
 }
 
 abstract class E2 {
@@ -19,11 +19,11 @@ abstract class E2 {
 }
 
 sealed interface SI2 {
-    object ClassToObject : SI2
+    data object ClassToObject : SI2
     class ObjectToClass : SI2
 }
 
 sealed class SC2 {
-    object ClassToObject : SC2()
+    data object ClassToObject : SC2()
     class ObjectToClass : SC2()
 }

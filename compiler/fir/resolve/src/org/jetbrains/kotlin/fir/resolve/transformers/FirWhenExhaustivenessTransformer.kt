@@ -18,7 +18,6 @@ import org.jetbrains.kotlin.fir.declarations.getSealedClassInheritors
 import org.jetbrains.kotlin.fir.declarations.utils.isExpect
 import org.jetbrains.kotlin.fir.declarations.utils.modality
 import org.jetbrains.kotlin.fir.expressions.*
-import org.jetbrains.kotlin.fir.expressions.impl.FirElseIfTrueCondition
 import org.jetbrains.kotlin.fir.resolve.BodyResolveComponents
 import org.jetbrains.kotlin.fir.resolve.fullyExpandedType
 import org.jetbrains.kotlin.fir.resolve.providers.symbolProvider
@@ -186,7 +185,7 @@ class FirWhenExhaustivenessTransformer(private val bodyResolveComponents: BodyRe
                     // If `symbolEqualsChecks` is not empty, then some checks we relied on during the exhaustiveness
                     // analysis may be tricked by unsafe `equals()` implementation by the subject, in which case
                     // the user may want to add `else ->` as an additional measure.
-                    status is ExhaustivenessStatus.ProperlyExhaustive && status.symbolEqualsChecks.isEmpty() ->
+                    status is ExhaustivenessStatus.ProperlyExhaustive && status.symbolsNotCoveredByUnsafeEquals.isEmpty() ->
                         ExhaustivenessStatus.RedundantlyExhaustive
                     else -> ExhaustivenessStatus.ProperlyExhaustive()
                 }
@@ -245,7 +244,7 @@ class FirWhenExhaustivenessTransformer(private val bodyResolveComponents: BodyRe
 
         val whenMissingCases = mutableListOf<WhenMissingCase>()
         whenMissingCases.collectMissingCases(checkers, whenExpression, unwrappedSubjectType, session)
-        val casesWithUntrustworthyEquals = whenMissingCases.filterIsInstance<WhenMissingCase.SymbolEqualsCheck>()
+        val casesWithUntrustworthyEquals = whenMissingCases.filterIsInstance<WhenMissingCase.SymbolsNotCoveredByUnsafeEqualsAreMissing>()
 
         return if (whenMissingCases.size == casesWithUntrustworthyEquals.size) {
             ExhaustivenessStatus.ProperlyExhaustive(casesWithUntrustworthyEquals)
@@ -461,7 +460,7 @@ private object WhenOnSealedClassExhaustivenessChecker : WhenExhaustivenessChecke
 
         symbolEqualsChecks.mapNotNullTo(destination) {
             val classId = (it.key as? FirClassSymbol<*>)?.classId ?: return@mapNotNullTo null
-            WhenMissingCase.SymbolEqualsCheck(classId, it.value)
+            WhenMissingCase.SymbolsNotCoveredByUnsafeEqualsAreMissing(classId, it.value)
         }
     }
 

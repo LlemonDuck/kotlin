@@ -33,7 +33,7 @@ fun testPlatformGood(base: Base) {
     if (base is I) {
         val x = when (base) { // must be OK
             <!USELESS_IS_CHECK!>is A<!> -> 1
-            B -> 2
+            <!UNSAFE_EXHAUSTIVENESS!>B<!> -> 2
             <!USELESS_IS_CHECK!>is C<!> -> 3
         }
     }

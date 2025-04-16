@@ -19,7 +19,7 @@ fun test_1(a: A) {
 fun test_2(a: A) {
     val s = when(a) {
         is B -> ""
-        C -> ""
+        <!UNSAFE_EXHAUSTIVENESS!>C<!> -> ""
     }
     takeString(s)
 }

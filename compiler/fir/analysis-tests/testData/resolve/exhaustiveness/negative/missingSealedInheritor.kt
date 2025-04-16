@@ -22,7 +22,7 @@ fun test_1(base: Base) {
 
     val z = when (base) {
         is A -> 1
-        B -> 2
+        <!UNSAFE_EXHAUSTIVENESS!>B<!> -> 2
     }
 }
 
@@ -39,7 +39,7 @@ fun test_2(base: Base?) {
 
     val z = when (base) {
         is A -> 1
-        B -> 2
+        <!UNSAFE_EXHAUSTIVENESS!>B<!> -> 2
         null -> 3
     }
 }

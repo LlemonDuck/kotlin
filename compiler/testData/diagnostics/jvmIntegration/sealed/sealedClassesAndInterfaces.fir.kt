@@ -52,7 +52,7 @@ fun test_2(base: IBase) {
         is B.Second -> 3
         C.SomeValue -> 4
         C.AnotherValue -> 5
-        D -> 6
+        <!UNSAFE_EXHAUSTIVENESS!>D<!> -> 6
     }
 }
 
@@ -67,6 +67,6 @@ fun test_4(base: Base) {
     val x = when (base) {
         is B.First -> 2
         is B.Second -> 3
-        D -> 6
+        <!UNSAFE_EXHAUSTIVENESS!>D<!> -> 6
     }
 }

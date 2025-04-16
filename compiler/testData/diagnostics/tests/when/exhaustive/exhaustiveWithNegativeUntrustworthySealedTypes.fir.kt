@@ -17,10 +17,10 @@ fun foo(v: Variants): String {
         return "A"
     }
 
-    return when (v) {
-        Variants.B -> "B"
+    return when (<!UNSAFE_EXHAUSTIVENESS("Variants.A")!>v<!>) {
+        <!UNSAFE_EXHAUSTIVENESS("Variants.B")!>Variants.B<!> -> "B"
         Variants.C -> "C"
-        Variants.D -> "D"
+        <!UNSAFE_EXHAUSTIVENESS("Variants.D")!>Variants.D<!> -> "D"
     }
 }
 

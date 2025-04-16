@@ -18,10 +18,10 @@ enum class E2 {
 
 sealed interface SI2 {
     class ClassToObject : SI2
-    object ObjectToClass : SI2
+    data object ObjectToClass : SI2
 }
 
 sealed class SC2 {
     class ClassToObject : SC2()
-    object ObjectToClass : SC2()
+    data object ObjectToClass : SC2()
 }

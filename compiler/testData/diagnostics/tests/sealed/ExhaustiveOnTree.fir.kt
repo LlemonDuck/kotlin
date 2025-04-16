@@ -12,7 +12,7 @@ sealed class Base {
     fun foo() = when (this) {
         is A -> 1
         is B.B1 -> 2
-        B.B2 -> 3
+        <!UNSAFE_EXHAUSTIVENESS!>B.B2<!> -> 3
         // No else required
     }
 
@@ -23,13 +23,13 @@ sealed class Base {
 
     fun baz() = when (this) {
         is A -> 1
-        B.B2 -> 3
+        <!UNSAFE_EXHAUSTIVENESS!>B.B2<!> -> 3
         // No else required (no possible B1 instances)
     }
 
     fun negated() = when (this) {
         !is A -> 1
-        A.A1 -> 2
+        <!UNSAFE_EXHAUSTIVENESS!>A.A1<!> -> 2
         is A.A2 -> 3
     }
 }

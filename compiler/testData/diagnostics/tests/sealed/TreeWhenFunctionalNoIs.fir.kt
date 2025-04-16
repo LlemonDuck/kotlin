@@ -5,7 +5,7 @@ sealed class Tree {
     class Node(val left: Tree, val right: Tree): Tree()
 
     fun max(): Int = when(this) {
-        Empty -> -1
+        <!UNSAFE_EXHAUSTIVENESS!>Empty<!> -> -1
         is Leaf  -> this.x
         is Node  -> this.left.max()
     }

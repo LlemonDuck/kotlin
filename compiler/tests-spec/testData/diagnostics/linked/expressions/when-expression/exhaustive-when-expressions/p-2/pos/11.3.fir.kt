@@ -34,9 +34,9 @@ fun case_3(value_1: SealedClassWithMethods?): String = when (value_1) {
 
 // TESTCASE NUMBER: 4
 fun case_4(value_1: SealedClassWithObjects?): String = when (value_1) {
-    SealedWithObjectsChild1 -> ""
-    SealedWithObjectsChild2 -> ""
-    SealedWithObjectsChild3 -> ""
+    <!UNSAFE_EXHAUSTIVENESS!>SealedWithObjectsChild1<!> -> ""
+    <!UNSAFE_EXHAUSTIVENESS!>SealedWithObjectsChild2<!> -> ""
+    <!UNSAFE_EXHAUSTIVENESS!>SealedWithObjectsChild3<!> -> ""
     null -> ""
 }
 
@@ -45,9 +45,9 @@ fun case_5(value_1: SealedClassMixed?): String = when (value_1) {
     is SealedMixedChild1 -> ""
     is SealedMixedChild2 -> ""
     is SealedMixedChild3 -> ""
-    SealedMixedChildObject1 -> ""
-    SealedMixedChildObject2 -> ""
-    SealedMixedChildObject3 -> ""
+    <!UNSAFE_EXHAUSTIVENESS!>SealedMixedChildObject1<!> -> ""
+    <!UNSAFE_EXHAUSTIVENESS!>SealedMixedChildObject2<!> -> ""
+    <!UNSAFE_EXHAUSTIVENESS!>SealedMixedChildObject3<!> -> ""
     null -> ""
 }
 

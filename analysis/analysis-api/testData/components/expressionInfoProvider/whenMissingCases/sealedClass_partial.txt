@@ -1,2 +1,2 @@
 IsTypeCheckIsMissing - is Foo.B
-SymbolEqualsCheck - A
+SymbolsNotCoveredByUnsafeEqualsAreMissing - A

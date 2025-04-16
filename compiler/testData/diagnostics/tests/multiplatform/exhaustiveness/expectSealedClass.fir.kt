@@ -28,7 +28,7 @@ class C : Base()
 fun testPlatformGood(base: Base) {
     val x = when (base) { // must be OK
         is A -> 1
-        B -> 2
+        <!UNSAFE_EXHAUSTIVENESS!>B<!> -> 2
         is C -> 3
     }
 }

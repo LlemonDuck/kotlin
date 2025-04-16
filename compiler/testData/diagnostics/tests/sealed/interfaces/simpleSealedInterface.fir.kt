@@ -34,6 +34,6 @@ fun test_2(base: Base) {
         is B.Second -> 3
         C.SomeValue -> 4
         C.AnotherValue -> 5
-        D -> 6
+        <!UNSAFE_EXHAUSTIVENESS!>D<!> -> 6
     }
 }
