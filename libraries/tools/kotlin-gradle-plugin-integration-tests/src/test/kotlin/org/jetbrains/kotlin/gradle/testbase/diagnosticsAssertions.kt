@@ -64,75 +64,75 @@ internal fun String.assertNoDiagnostic(diagnosticFactory: ToolingDiagnosticFacto
  * [org.jetbrains.kotlin.gradle.plugin.diagnostics.KotlinToolingDiagnostics.InternalKotlinGradlePluginPropertiesUsed].
  * For the sake of clarity, this diagnostic is filtered by default.
  */
-fun BuildResult.extractProjectsAndTheirDiagnostics(): String =
-    buildString {
-        var diagnosticStarted = false
-        var stacktraceStarted = false
-        val currentDiagnostic = mutableListOf<String>()
+fun BuildResult.extractProjectsAndTheirDiagnostics(): String = buildString {
+    var diagnosticStarted = false
+    var stacktraceStarted = false
+    val currentDiagnostic = mutableListOf<String>()
 
-        fun startDiagnostic(line: String, lineIndex: Int) {
-            require(!diagnosticStarted) {
-                printBuildOutput()
-                "Unexpected start of diagnostic $line on line ${lineIndex + 1}. The end of the previous diagnostic wasn't found yet"
-            }
-
-            diagnosticStarted = true
+    fun startDiagnostic(line: String, lineIndex: Int) {
+        require(!diagnosticStarted) {
+            printBuildOutput()
+            "Unexpected start of diagnostic $line on line ${lineIndex + 1}. The end of the previous diagnostic wasn't found yet"
         }
 
-        fun continueDiagnostic(line: String) {
-            when {
-                line == KOTLIN_DIAGNOSTIC_STACKTRACE_START -> {
-                    stacktraceStarted = true
-                    currentDiagnostic += line
-                    currentDiagnostic += DIAGNOSTIC_STACKTRACE_REPLACEMENT_STUB
-                }
+        currentDiagnostic += line
+        diagnosticStarted = true
+    }
 
-                line == KOTLIN_DIAGNOSTIC_STACKTRACE_END_SEPARATOR -> {
-                    stacktraceStarted = false
-                }
-
-                stacktraceStarted -> return // Omit stacktrace lines for tests stability
-
-                else -> currentDiagnostic += line
+    fun continueDiagnostic(line: String) {
+        when {
+            line == KOTLIN_DIAGNOSTIC_STACKTRACE_START -> {
+                stacktraceStarted = true
+                currentDiagnostic += line
+                currentDiagnostic += DIAGNOSTIC_STACKTRACE_REPLACEMENT_STUB
             }
+
+            line == KOTLIN_DIAGNOSTIC_STACKTRACE_END_SEPARATOR -> {
+                stacktraceStarted = false
+            }
+
+            stacktraceStarted -> return // Omit stacktrace lines for tests stability
+
+            else -> currentDiagnostic += line
+        }
+    }
+
+    fun endDiagnostic(line: String, lineIndex: Int) {
+        require(diagnosticStarted) {
+            printBuildOutput()
+            "Unexpected end of diagnostic $line on line ${lineIndex + 1}"
         }
 
-        fun endDiagnostic(line: String, lineIndex: Int) {
-            require(diagnosticStarted) {
-                printBuildOutput()
-                "Unexpected end of diagnostic $line on line ${lineIndex + 1}"
-            }
+        currentDiagnostic += line
 
-            currentDiagnostic += line
-
-            if (KotlinToolingDiagnostics.InternalKotlinGradlePluginPropertiesUsed.id in currentDiagnostic.first()) {
-                val cleanedDiagnostic = filterKgpUtilityPropertiesFromDiagnostic(currentDiagnostic)
-                if (cleanedDiagnostic.isNotEmpty()) appendLine(cleanedDiagnostic.joinToString(separator = "\n", postfix = "\n"))
-            } else {
-                appendLine(currentDiagnostic.joinToString(separator = "\n", postfix = "\n"))
-            }
-
-            currentDiagnostic.clear()
-            diagnosticStarted = false
+        if (KotlinToolingDiagnostics.InternalKotlinGradlePluginPropertiesUsed.id in currentDiagnostic.first()) {
+            val cleanedDiagnostic = filterKgpUtilityPropertiesFromDiagnostic(currentDiagnostic)
+            if (cleanedDiagnostic.isNotEmpty()) appendLine(cleanedDiagnostic.joinToString(separator = "\n", postfix = "\n"))
+        } else {
+            appendLine(currentDiagnostic.joinToString(separator = "\n", postfix = "\n"))
         }
 
+        currentDiagnostic.clear()
+        diagnosticStarted = false
+    }
 
-        for ((index, line) in output.lines().withIndex()) {
-            when {
-                line.trim() == VERBOSE_DIAGNOSTIC_SEPARATOR -> endDiagnostic(line, index)
 
-                DIAGNOSTIC_START_REGEX.containsMatchIn(line) -> startDiagnostic(line, index)
+    for ((index, line) in output.lines().withIndex()) {
+        when {
+            line.trim() == VERBOSE_DIAGNOSTIC_SEPARATOR -> endDiagnostic(line, index)
 
-                diagnosticStarted -> continueDiagnostic(line)
+            DIAGNOSTIC_START_REGEX.containsMatchIn(line) -> startDiagnostic(line, index)
 
-                line.startsWith(CONFIGURE_PROJECT_PREFIX)
-                        || (line.contains(ENSURE_NO_KOTLIN_GRADLE_PLUGIN_ERRORS_TASK_NAME) && line.startsWith(TASK_EXECUTION_PREFIX)) -> {
-                    appendLine() // additional empty line between projects
-                    appendLine(line)
-                }
+            diagnosticStarted -> continueDiagnostic(line)
+
+            line.startsWith(CONFIGURE_PROJECT_PREFIX)
+                    || (line.contains(ENSURE_NO_KOTLIN_GRADLE_PLUGIN_ERRORS_TASK_NAME) && line.startsWith(TASK_EXECUTION_PREFIX)) -> {
+                appendLine() // additional empty line between projects
+                appendLine(line)
             }
         }
-    }.trim()
+    }
+}.trim()
 
 /**
  * Filters from the report all internal utility-properties that KGP uses in tests.
