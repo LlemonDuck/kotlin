@@ -607,7 +607,9 @@ abstract class FirDataFlowAnalyzer(
             else -> computeEqualsOverrideContract(leftOperandType, components.session, components.scopeSession)
         }
 
-        fun FirBasedSymbol<*>.isSingleton(): Boolean = this is FirEnumEntrySymbol || this is FirRegularClassSymbol && classKind.isObject
+        fun FirBasedSymbol<*>.isSingleton(): Boolean = this is FirEnumEntrySymbol
+                // If the object has a problematic `equals()`, it will be reported during `when` exhaustiveness analysis.
+                || this is FirRegularClassSymbol && classKind.isObject
 
         fun addEqualityImplications(variable: DataFlowVariable?, otherOperand: FirExpression) {
             if (variable !is RealVariable) return

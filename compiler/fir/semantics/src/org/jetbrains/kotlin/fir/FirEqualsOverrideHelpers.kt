@@ -5,7 +5,7 @@
 
 package org.jetbrains.kotlin.fir
 
-import org.jetbrains.kotlin.descriptors.ClassKind
+import org.jetbrains.kotlin.descriptors.isObject
 import org.jetbrains.kotlin.fir.declarations.FirResolvePhase
 import org.jetbrains.kotlin.fir.declarations.getSealedClassInheritors
 import org.jetbrains.kotlin.fir.declarations.isEquals
@@ -24,6 +24,7 @@ import org.jetbrains.kotlin.fir.scopes.getFunctions
 import org.jetbrains.kotlin.fir.scopes.unsubstitutedScope
 import org.jetbrains.kotlin.fir.symbols.impl.FirClassSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirClassifierSymbol
+import org.jetbrains.kotlin.fir.symbols.impl.FirNamedFunctionSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirRegularClassSymbol
 import org.jetbrains.kotlin.fir.types.ConeKotlinType
 import org.jetbrains.kotlin.name.ClassId
@@ -86,11 +87,8 @@ fun computeEqualsOverrideContract(
         visitedSymbols = visitedSymbols,
     )
     val superClassSymbols = superTypes.mapNotNull { it.fullyExpandedType(session).toRegularClassSymbol(session) }
-
-    val supertypesContract = when (superClassSymbols.any { it.hasEqualsOverrideContract(session, scopeSession) }) {
-        true -> EqualsOverrideContract.UNKNOWN
-        false -> EqualsOverrideContract.SAFE_FOR_SMART_CAST
-    }
+    val supertypesContract = superClassSymbols.minOfOrNull { it.getDeclaredEqualsOverrideContract(session, scopeSession) }
+        ?: EqualsOverrideContract.SAFE_FOR_SMART_CAST
 
     return minOf(subtypesContract, supertypesContract)
 }
@@ -108,46 +106,62 @@ private fun FirClassSymbol<*>.computeEqualsOverrideContract(
         }
 
         // Note that `sealed class` variants may have additional supertypes
-        return computeEqualsOverrideContract(inheritors, session, scopeSession, visitedSymbols)
+        return inheritors.minOfOrNull { computeEqualsOverrideContract(listOf(it), session, scopeSession, visitedSymbols) }
+            ?: EqualsOverrideContract.SAFE_FOR_SMART_CAST
     }
 
     return when {
-        isFinal -> when {
-            !hasEqualsOverrideContract(session, scopeSession) -> EqualsOverrideContract.SAFE_FOR_SMART_CAST
-            isData || isInlineOrValue || classKind == ClassKind.OBJECT -> EqualsOverrideContract.TRUSTED_FOR_EXHAUSTIVENESS
-            else -> EqualsOverrideContract.UNKNOWN
-        }
-        isSealed && !hasEqualsOverrideContract(session, scopeSession) -> minOf(
-            EqualsOverrideContract.TRUSTED_FOR_EXHAUSTIVENESS,
+        isFinal -> getDeclaredEqualsOverrideContract(session, scopeSession)
+        isSealed -> minOf(
+            EqualsOverrideContract.TRUSTED_FOR_EXHAUSTIVENESS, // We could leave `SAFE_FOR_SMART_CAST`, but we choose to be conservative.
+            getDeclaredEqualsOverrideContract(session, scopeSession),
             computeInheritorsContract(),
         )
         else -> EqualsOverrideContract.UNKNOWN
     }
 }
 
-private fun FirClassSymbol<*>.hasEqualsOverrideContract(session: FirSession, scopeSession: ScopeSession): Boolean {
-    if (resolvedStatus.isExpect) return true
-    if (isSmartcastPrimitive(classId)) return false
+private fun FirClassSymbol<*>.getDeclaredEqualsOverrideContract(
+    session: FirSession,
+    scopeSession: ScopeSession,
+): EqualsOverrideContract {
+    if (resolvedStatus.isExpect) return EqualsOverrideContract.UNKNOWN
+    if (isSmartcastPrimitive(classId)) return EqualsOverrideContract.SAFE_FOR_SMART_CAST
     when (classId) {
-        StandardClassIds.Any -> return false
+        StandardClassIds.Any -> return EqualsOverrideContract.SAFE_FOR_SMART_CAST
         // Float and Double effectively had non-trivial `equals` semantics while they don't have explicit overrides (see KT-50535)
-        StandardClassIds.Float, StandardClassIds.Double -> return true
+        StandardClassIds.Float, StandardClassIds.Double -> return EqualsOverrideContract.UNKNOWN
         // kotlin.Enum has `equals()`, but we know it's reasonable
-        StandardClassIds.Enum -> return false
+        StandardClassIds.Enum -> return EqualsOverrideContract.SAFE_FOR_SMART_CAST
     }
 
     // When the class belongs to a different module, "equals" contract might be changed without re-compilation
     // But since we had such behavior in FE1.0, it might be too strict to prohibit it now, especially once there's a lot of cases
     // when different modules belong to a single project, so they're totally safe (see KT-50534)
-    // if (moduleData != session.moduleData) {
-    //     return true
-    // }
 
     val ownerTag = this.toLookupTag()
-    return this.unsubstitutedScope(
+    val declaredEquals = this.unsubstitutedScope(
         session, scopeSession, withForcedTypeCalculator = false, memberRequiredPhase = FirResolvePhase.STATUS
-    ).getFunctions(OperatorNameConventions.EQUALS).any {
+    ).getFunctions(OperatorNameConventions.EQUALS).find {
         !it.isSubstitutionOrIntersectionOverride && it.isEquals(session) && ownerTag.isRealOwnerOf(it)
+    }
+
+    // If the symbol comes from a dependency, we decide to trust that it's sane.
+    // This is to avoid upsetting users who use carefully verified classes from a library,
+    // and because we can no longer check its origin.
+    val isTrustedDependency = (isData || isInlineOrValue || classKind.isObject) && moduleData != session.moduleData
+
+    return when {
+        declaredEquals == null -> when {
+            // `object`s are safe for smartcasts, but should not be trusted for exhaustiveness because of their `==`.
+            // Since no one really relies on smartcasts to the object type when `==`-ing them, we can cheat a bit and
+            // drop to `UNKNOWN` instead of abandoning the total order convenience of `EqualsOverrideContract`.
+            classKind.isObject && !isData -> EqualsOverrideContract.UNKNOWN
+            else -> EqualsOverrideContract.SAFE_FOR_SMART_CAST
+        }
+        // We could conclude `SAFE_FOR_SMART_CAST` from `isGenerated`, but we choose to be conservative.
+        declaredEquals.isGenerated || isTrustedDependency -> EqualsOverrideContract.TRUSTED_FOR_EXHAUSTIVENESS
+        else -> EqualsOverrideContract.UNKNOWN
     }
 }
 
@@ -165,3 +179,5 @@ fun isSmartcastPrimitive(classId: ClassId?): Boolean {
         else -> false
     }
 }
+
+private val FirNamedFunctionSymbol.isGenerated: Boolean get() = origin.generatedAnyMethod

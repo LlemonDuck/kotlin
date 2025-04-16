@@ -6,8 +6,10 @@ open class PhantomEquivalence {
 }
 
 sealed interface Variants {
-    data object A : Variants
+    object A : Variants
     object B : PhantomEquivalence(), Variants
+    data object C : Variants
+    data object D : PhantomEquivalence(), Variants
 }
 
 fun foo(v: Variants): String {
@@ -15,8 +17,10 @@ fun foo(v: Variants): String {
         return "B"
     }
 
-    return when (<!UNSAFE_EXHAUSTIVENESS("Variants.B")!>v<!>) {
-        <!UNSAFE_EXHAUSTIVENESS("Variants.A")!>Variants.A<!> -> "A"
+    return when (v) {
+        Variants.A -> "B"
+        Variants.D -> "D"
+        Variants.C -> "C"
     }
 }
 
@@ -27,6 +31,8 @@ fun bar(v: Variants): String {
 
     return when (v) {
         Variants.A -> "A"
-        else -> "C"
+        Variants.D -> "D"
+        Variants.C -> "C"
+        <!REDUNDANT_ELSE_IN_WHEN!>else<!> -> "B?"
     }
 }
