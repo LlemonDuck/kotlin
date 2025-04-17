@@ -46,15 +46,15 @@ if (!disableInputsCheck) {
                         if (file.isDirectory()) {
                             addedDirs.add(file)
                             listOf(
-                                """permission java.io.FilePermission "${file.absolutePath}/", "read";""",
-                                """permission java.io.FilePermission "${file.absolutePath}/-", "read${
+                                """permission java.io.FilePermission "${file.absolutePath}${File.separatorChar}", "read";""",
+                                """permission java.io.FilePermission "${file.absolutePath}${File.separatorChar}-", "read${
                                     // We write to the testData folder from tests...
-                                    if (file.canonicalPath.contains("/testData/")) ",write" else ""
+                                    if (file.canonicalPath.contains("${File.separatorChar}testData${File.separatorChar}")) ",write" else ""
                                 }";""",
                             )
                         } else if (file.extension == "class") {
                             listOfNotNull(
-                                """permission java.io.FilePermission "${file.parentFile.absolutePath}/-", "read";""".takeIf {
+                                """permission java.io.FilePermission "${file.parentFile.absolutePath}${File.separatorChar}-", "read";""".takeIf {
                                     addedDirs.add(
                                         file.parentFile
                                     )
@@ -99,7 +99,7 @@ if (!disableInputsCheck) {
                         policyFile.writeText(
                             permissionsTemplateFile.readText().replace(
                                 "{{temp_dir}}",
-                                (parentsReadPermission(File(temp_dir)) + """permission java.io.FilePermission "$temp_dir/-", "read,write,delete";""" + """permission java.io.FilePermission "$temp_dir", "read";""").joinToString(
+                                (parentsReadPermission(File(temp_dir)) + """permission java.io.FilePermission "$temp_dir${File.separatorChar}-", "read,write,delete";""" + """permission java.io.FilePermission "$temp_dir", "read";""").joinToString(
                                     "\n    "
                                 )
                             ).replace("{{jdk}}", ((defineJDKEnvVariables + javaVersion.get()).map { version ->
@@ -107,7 +107,7 @@ if (!disableInputsCheck) {
                                     languageVersion.set(JavaLanguageVersion.of(version))
                                 }.orNull?.executablePath?.asFile?.parentFile?.parentFile?.parentFile?.parentFile?.canonicalPath
                                     ?: error("Can't find toolchain for $version")
-                                """permission java.io.FilePermission "$jdkHome/-", "read,execute";"""
+                                """permission java.io.FilePermission "$jdkHome${File.separatorChar}-", "read,execute";"""
                             }).joinToString("\n    ")).replace(
                                 "{{gradle_user_home}}", """$gradleUserHomeDir"""
                             ).replace("{{inputs}}", inputPermissions.sorted().joinToString("\n    ")))
