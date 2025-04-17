@@ -111,6 +111,7 @@ if (!disableInputsCheck) {
                             }).joinToString("\n    ")).replace(
                                 "{{gradle_user_home}}", """$gradleUserHomeDir"""
                             ).replace("{{inputs}}", inputPermissions.sorted().joinToString("\n    ")))
+                        println(policyFile.readText())
                     } catch (e: IOException) {
                         logger.error("Failed to generate security policy file", e)
                         throw e
