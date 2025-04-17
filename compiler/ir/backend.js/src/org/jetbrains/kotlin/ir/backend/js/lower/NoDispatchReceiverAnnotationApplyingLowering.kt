@@ -24,7 +24,7 @@ object NoDispatchReceiverAnnotationApplyingLowering : ModuleLoweringPass {
         RemoveDispatchParameterPass.lower(irModule)
     }
 
-    private object RemoveDispatchArgumentPass : IrVisitorVoid(), BodyLoweringPass {
+    private object RemoveDispatchArgumentPass : BodyLoweringPass {
         override fun lower(irBody: IrBody, container: IrDeclaration) {
             irBody.acceptChildrenVoid(object : IrVisitorVoid() {
                 override fun visitElement(element: IrElement) {
@@ -35,7 +35,7 @@ object NoDispatchReceiverAnnotationApplyingLowering : ModuleLoweringPass {
                     val callee = expression.symbol.owner
                     if (callee.hasAnnotation(JsStandardClassIds.Annotations.JsNoDispatchReceiver)) {
                         // Has to be called before the corresponding parameter is removed.
-                        expression.removeDispatchReceiver()
+                        expression.arguments.removeAt(0)
                     }
                     super.visitCall(expression)
                 }
@@ -43,7 +43,7 @@ object NoDispatchReceiverAnnotationApplyingLowering : ModuleLoweringPass {
         }
     }
 
-    private object RemoveDispatchParameterPass : IrVisitorVoid(), BodyLoweringPass {
+    private object RemoveDispatchParameterPass : BodyLoweringPass {
         override fun lower(irBody: IrBody, container: IrDeclaration) {
             irBody.acceptChildrenVoid(object : IrVisitorVoid() {
                 override fun visitElement(element: IrElement) {

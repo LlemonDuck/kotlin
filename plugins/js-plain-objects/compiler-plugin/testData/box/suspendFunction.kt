@@ -26,10 +26,17 @@ external interface Options {
     val method: String
 }
 
+@JsPlainObject
+external interface ComplexOptions {
+    val name: String
+    val method: String
+}
+
 suspend fun getMethod(): String = "GET"
 
 fun box(): String {
     var result = "OK"
+
     builder {
         val options1 = Options(method = getMethod())
         if (options1.method != "GET") {
@@ -40,6 +47,15 @@ fun box(): String {
         if (options2.method != "GET") {
             result = options2.method
         }
+        val complexOptions = ComplexOptions(method = getMethod(), name = "test")
+        if (complexOptions.method != "GET") {
+            result = complexOptions.method
+        }
+        val complexOptions2 = ComplexOptions(method = getMethod(), name = "test")
+        if (complexOptions2.method != "GET") {
+            result = complexOptions2.method
+        }
     }
+
     return result
 }

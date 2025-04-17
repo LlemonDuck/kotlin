@@ -22,8 +22,8 @@ private fun BitSet.withBit(bit: Int) = if (get(bit)) this else copy().also { it.
 private fun BitSet.withOutBit(bit: Int) = if (!get(bit)) this else copy().also { it.clear(bit) }
 
 object LivenessAnalysis {
-    fun run(body: IrBody, filter: (IrElement) -> Boolean) =
-        LivenessAnalysisVisitor(filter).run(body)
+    fun run(body: IrBody, allowUninitializedUsage: Boolean = false, filter: (IrElement) -> Boolean) =
+        LivenessAnalysisVisitor(filter, allowUninitializedUsage).run(body)
 
     private fun IrElement.getImmediateChildren(): List<IrElement> {
         val result = mutableListOf<IrElement>()
@@ -41,7 +41,7 @@ object LivenessAnalysis {
      * this directly translates to the AST traversal from right to left.
      * Each visitXXX takes live variables ~after~ the [element] and returns live variables ~before~ the [element].
      */
-    private class LivenessAnalysisVisitor(val filter: (IrElement) -> Boolean) : IrVisitor<BitSet, BitSet>() {
+    private class LivenessAnalysisVisitor(val filter: (IrElement) -> Boolean, val allowUninitializedUsage: Boolean) : IrVisitor<BitSet, BitSet>() {
         private val variables = mutableListOf<IrVariable>()
         private val variableIds = mutableMapOf<IrVariable, Int>()
         private val filteredElementEndsLV = mutableMapOf<IrElement, BitSet>()
@@ -110,7 +110,7 @@ object LivenessAnalysis {
             val variableId = getVariableId(declaration)
             var liveVariables = data.withOutBit(variableId)
             liveVariables = declaration.initializer?.accept(this, liveVariables) ?: liveVariables
-            require(!liveVariables.get(variableId)) { "Use of uninitialized variable ${declaration.render()}" }
+            require(!liveVariables.get(variableId) || allowUninitializedUsage) { "Use of uninitialized variable ${declaration.render()}" }
             liveVariables
         }
 
