@@ -1,4 +1,4 @@
-grant codeBase "file:{{gradle_user_home}}/-" {
+grant codeBase "file:{{gradle_user_home}}\\-" {
     permission java.security.AllPermission;
 };
 grant {
