@@ -4,7 +4,7 @@ import java.util.HashSet
 import org.gradle.internal.os.OperatingSystem
 import java.util.Locale
 
-val disableInputsCheck = project.providers.gradleProperty("kotlin.test.instrumentation.disable.inputs.check").orNull?.toBoolean() == true
+val disableInputsCheck = project.providers.systemProperty("kotlin.test.instrumentation.disable.inputs.check").orNull?.toBoolean() == true
 if (!disableInputsCheck) {
     tasks.withType<Test>().names.forEach {
         val permissionsTask =
